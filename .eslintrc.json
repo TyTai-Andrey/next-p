@@ -1,3 +1,218 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@next/next/recommended",
+    "airbnb",
+    "airbnb/hooks",
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "plugins": [
+    "react",
+    "@next/next",
+    "@getify/proper-ternary",
+    "sort-keys",
+    "sort-destructure-keys",
+    "sort-exports"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "./",
+          "next"
+        ]
+      }
+    }
+  },
+  "ignorePatterns": [
+    "build"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@getify/proper-ternary/nested": "error",
+    "@next/next/no-img-element": "off",
+    "arrow-parens": [
+      "error",
+      "as-needed",
+      {
+        "requireForBlockBody": true
+      }
+    ],
+    "class-methods-use-this": "off",
+    "function-paren-newline": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [
+          "next"
+        ]
+      }
+    ],
+    "import/no-extraneous-dependencies": "off",
+    "import/no-anonymous-default-export": "error",
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-param-reassign": "off",
+    "no-shadow": "warn",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "aspects": [
+          "invalidHref",
+          "preferButton"
+        ],
+        "components": [
+          "Link"
+        ],
+        "specialLink": [
+          "hrefLeft",
+          "hrefRight"
+        ]
+      }
+    ],
+    "linebreak-style": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 150,
+        "ignoreComments": true,
+        "ignoreUrls": true
+      }
+    ],
+    "no-console": "off",
+    "no-alert": "error",
+    "no-empty": "off",
+    "no-nested-ternary": "off",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "no-mixed-operators": [
+      "error",
+      {
+        "groups": [
+          [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "?:"
+          ],
+          [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "&&",
+            "||"
+          ]
+        ]
+      }
+    ],
+    "operator-linebreak": [
+      "error",
+      "after"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "react/forbid-prop-types": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
+    "react/jsx-indent": [
+      "error",
+      2
+    ],
+    "react/jsx-indent-props": [
+      "error",
+      2
+    ],
+    "react/jsx-no-useless-fragment": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "sort-keys": "off",
+    "sort-keys/sort-keys-fix": [
+      "error",
+      "asc",
+      {
+        "caseSensitive": false,
+        "natural": false,
+        "minKeys": 2
+      }
+    ],
+    "sort-destructure-keys/sort-destructure-keys": [
+      2,
+      {
+        "caseSensitive": false
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": {
+          "multiline": true,
+          "minProperties": 3
+        },
+        "ObjectPattern": {
+          "multiline": true,
+          "minProperties": 3
+        },
+        "ImportDeclaration": {
+          "multiline": true,
+          "minProperties": 3
+        },
+        "ExportDeclaration": {
+          "multiline": true,
+          "minProperties": 3
+        }
+      }
+    ],
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "sort-imports": [
+      "error",
+      {
+        "allowSeparatedGroups": true
+      }
+    ],
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "ignoreCase": false
+      }
+    ],
+    "sort-exports/sort-exports": [
+      "error",
+      {
+        "sortDir": "asc"
+      }
+    ]
+  }
 }

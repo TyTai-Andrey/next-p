@@ -1,0 +1,75 @@
+// react
+import {
+  FC,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+
+// local imports
+// components
+import {
+  Button,
+  Container,
+  GalleryLine,
+  Image,
+  Window,
+} from "@compositions/Gallery/style";
+
+// images
+import noImg from "@assets/noImg.jpg";
+
+type GalleryProps = {
+  gameName?: string;
+  images: Screenshot[];
+}
+
+const Gallery: FC<GalleryProps> = ({ gameName, images }) => {
+  const [currentScreenshotIdx, setCurrentScreenshotIdx] = useState(0);
+
+  const nextScreenshot = useCallback(() => {
+    setCurrentScreenshotIdx(prev => ((prev + 1 < images.length) ? prev + 1 : images.length - 1),
+    );
+  }, [images.length]);
+
+  const prevScreenshot = useCallback(() => {
+    setCurrentScreenshotIdx(prev => ((prev - 1 > -1) ? prev - 1 : 0));
+  }, []);
+
+  const hasImages = useMemo(() => images.filter(image => !image.is_deleted).length > 0, [images]);
+
+  return hasImages && (
+    <Container>
+      <Button
+        disabled={!currentScreenshotIdx}
+        left
+        onClick={prevScreenshot}
+      >
+        {"<"}
+      </Button>
+      <Window>
+        <GalleryLine count={images.length} currentScreenshotIdx={currentScreenshotIdx}>
+          {images.map(image => (
+            <Image
+              alt={gameName ?? ""}
+              height={image.height}
+              key={image.id}
+              sizes="100vw"
+              src={image.image ?? noImg}
+              width={image.width}
+            />
+          ))}
+        </GalleryLine>
+      </Window>
+      <Button
+        disabled={images.length - 1 === currentScreenshotIdx}
+        onClick={nextScreenshot}
+        right
+      >
+        {">"}
+      </Button>
+    </Container>
+  );
+};
+
+export default Gallery;

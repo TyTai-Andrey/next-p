@@ -1,0 +1,12 @@
+const GamesTypes = {
+  // Async
+  FETCH_GAMES_ASYNC: "Games/FETCH_GAMES_ASYNC",
+  // Sync
+  FETCH_GAMES_FAILURE: "Games/FETCH_GAMES_FAILURE",
+  FETCH_GAMES_REQUEST: "Games/FETCH_GAMES_REQUEST",
+  FETCH_GAMES_SUCCESS: "Games/FETCH_GAMES_SUCCESS",
+
+  SET_GAMES: "Games/SET_GAMES",
+};
+
+export default GamesTypes;
