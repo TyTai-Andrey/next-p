@@ -1,3 +1,4 @@
+// vendor imports
 import styled, { css } from "styled-components";
 
 import ImageNext from "next/image";

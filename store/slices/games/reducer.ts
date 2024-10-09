@@ -4,16 +4,8 @@ import { createReducer } from "@reduxjs/toolkit";
 // Actions
 import GamesActions from "./actions";
 
-type InitState = {
-  data?: {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: null | Game[];
-  };
-  loading: boolean;
-  error: boolean;
-}
+// Interfaces
+import InitState from "./interfaces";
 
 const initialState: InitState = {
   data: {
@@ -56,5 +48,4 @@ const GamesReducer = createReducer(initialState, (builder) => {
   });
 });
 
-export type { InitState };
 export default GamesReducer;

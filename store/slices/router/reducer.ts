@@ -4,9 +4,8 @@ import { createReducer } from "@reduxjs/toolkit";
 // Actions
 import RouterActions from "./actions";
 
-type InitState = {
-  router?: string
-}
+// Interfaces
+import InitState from "./interfaces";
 
 const initialState: InitState = { router: undefined };
 

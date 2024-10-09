@@ -4,6 +4,7 @@ interface IListResult<T> {
   previous: string,
   results: T[]
 }
+type ITypeOrError<T> = T | { error: unknown };
 
 type ObjectType<T> = { [key: string]: T };
 type DefaultItem = { id: string; name: string };

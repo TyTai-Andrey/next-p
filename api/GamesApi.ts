@@ -1,7 +1,7 @@
 import BaseApi from "./BaseApi";
 
 export default class GamesApi {
-  static async getList(params: IGamesListRequest): Promise<IListResult<Game> | { error: unknown }> {
+  static async getList(params: IGamesListRequest): Promise<ITypeOrError<IListResult<Game>>> {
     const client = BaseApi.getClient();
     const options = {
       method: "GET",
@@ -17,7 +17,7 @@ export default class GamesApi {
     }
   }
 
-  static async getGameById(id: string): Promise<GameDetails | { error: unknown }> {
+  static async getGameById(id: string): Promise<ITypeOrError<GameDetails>> {
     const client = BaseApi.getClient();
     const options = {
       method: "GET",
@@ -32,8 +32,7 @@ export default class GamesApi {
     }
   }
 
-  static async getScreenshotsGameById(id: string): Promise<IListResult<Screenshot> | { error: unknown }> {
-    console.log(id);
+  static async getScreenshotsGameById(id: string): Promise<ITypeOrError<IListResult<Screenshot>>> {
     const client = BaseApi.getClient();
     const options = {
       method: "GET",

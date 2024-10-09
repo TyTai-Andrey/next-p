@@ -5,13 +5,13 @@ export const getClientAxios = axios.create({ headers: { Accept: "application/jso
 export default class BaseApi {
   static getClient() {
     return axios.create({
-      baseURL: "https://api.rawg.io/api",
+      baseURL: process.env.API_BASE_URL,
       headers: { Accept: "application/json" },
-      params: { key: "7dcb6f1da7f74a5786b46a791a0965ca" },
+      params: { key: process.env.API_KEY },
     });
   }
 
-  static async getList<T>(options: AxiosRequestConfig = {}): Promise<T | { error: unknown }> {
+  static async getList<T>(options: AxiosRequestConfig = {}): Promise<ITypeOrError<T>> {
     const client = BaseApi.getClient();
     try {
       const response = await client(options);

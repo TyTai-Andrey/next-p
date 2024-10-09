@@ -5,13 +5,16 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 
 // local imports
+// store
 import { getGamesResult } from "@store/slices/games/selectors";
+
 // components
 import Container from "@compositions/GameCardsList/style";
 import GameCard from "@components/GameCard";
 
 const GameCardsList = () => {
   const data = useSelector(getGamesResult);
+
   return (
     <Container>
       {data?.map(game => (

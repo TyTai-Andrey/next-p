@@ -1,8 +1,10 @@
-import styled from "styled-components";
+// vendor imports
+import styled, { css } from "styled-components";
 
-const H1 = styled.h1<{ noWrap?: boolean }>`
+type H1Props = { noWrap?: boolean }
+const H1 = styled.h1<H1Props>`
   font-size: 2em;
-  white-space: ${({ noWrap }) => noWrap && "nowrap"};
+  ${({ noWrap }) => noWrap && css`white-space: nowrap`};
 `;
 
 export default H1;

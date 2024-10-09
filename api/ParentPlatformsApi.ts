@@ -2,7 +2,7 @@ import BaseApi from "./BaseApi";
 
 export default class ParentPlatformsApi {
   static async getList(params?: IPlatformListRequest):
-    Promise<IListResult<PlatformDetails> | { error: unknown }> {
+    Promise<ITypeOrError<IListResult<PlatformDetails>>> {
     const client = BaseApi.getClient();
     const options = {
       method: "GET",

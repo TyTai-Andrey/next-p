@@ -27,16 +27,12 @@ type GalleryProps = {
 const Gallery: FC<GalleryProps> = ({ gameName, images }) => {
   const [currentScreenshotIdx, setCurrentScreenshotIdx] = useState(0);
 
-  const nextScreenshot = useCallback(() => {
-    setCurrentScreenshotIdx(prev => ((prev + 1 < images.length) ? prev + 1 : images.length - 1),
-    );
-  }, [images.length]);
-
-  const prevScreenshot = useCallback(() => {
-    setCurrentScreenshotIdx(prev => ((prev - 1 > -1) ? prev - 1 : 0));
-  }, []);
-
   const hasImages = useMemo(() => images.filter(image => !image.is_deleted).length > 0, [images]);
+
+  const prevScreenshot = useCallback(() => setCurrentScreenshotIdx(prev => ((prev - 1 > -1) ? prev - 1 : 0)), []);
+  const nextScreenshot = useCallback(() => setCurrentScreenshotIdx(
+    prev => ((prev + 1 < images.length) ? prev + 1 : images.length - 1),
+  ), [images.length]);
 
   return hasImages && (
     <Container>

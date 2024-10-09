@@ -7,7 +7,7 @@ interface Platform {
 }
 
 interface Game {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   released: string;

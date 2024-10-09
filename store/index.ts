@@ -1,8 +1,8 @@
 // redux
-import { CombinedState, configureStore } from "@reduxjs/toolkit";
-import createSagaMiddleware, { AnyAction, SagaMiddleware } from "redux-saga";
-import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+import { configureStore } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
 
+// local imports
 // store
 import {
   RootState,
@@ -10,13 +10,14 @@ import {
   rootSaga,
 } from "@store/slices";
 
-const sagaMiddleware = createSagaMiddleware();
+// interfaces
+import MyStore from "./interfaces";
 
-type MyStore = ToolkitStore<CombinedState<RootState>, AnyAction, SagaMiddleware<object>[]>
+const sagaMiddleware = createSagaMiddleware();
 
 let store: MyStore | undefined;
 
-const initializeStore = (preloadedState: any) => {
+const initializeStore = (preloadedState: RootState) => {
   if (store) return store;
 
   store = configureStore({

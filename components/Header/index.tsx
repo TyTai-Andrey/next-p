@@ -2,6 +2,7 @@
 import {
   ChangeEvent,
   FC,
+  useCallback,
   useState,
 } from "react";
 
@@ -29,7 +30,7 @@ type HeaderProps = {
 }
 
 const Header: FC<HeaderProps> = ({ withSearch }) => {
-  const [dropdownItems, setDropdownItems] = useState<DefaultItem[]>([]);
+  const [dropdownItems, setDropdownItems] = useState<Game[]>([]);
   const { pushRouter } = usePushRouter();
   const query = useSearchParams();
 
@@ -39,18 +40,16 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
     const response = await GamesApi.getList({ search });
 
     if (IsNotErrorResponse(response)) {
-      setDropdownItems(response.results as unknown as DefaultItem[]);
+      setDropdownItems(response.results);
     }
   };
 
-  const onSelect = ({ id }: { id: string }) => {
+  const onSelect = useCallback(({ id }: { id: string }) => {
     setDropdownItems([]);
     if (id) pushRouter(`/game/${id}`);
-  };
+  }, [pushRouter]);
 
-  const onClear = () => {
-    setDropdownItems([]);
-  };
+  const onClear = useCallback(() => setDropdownItems([]), []);
 
   return (
     <Container>

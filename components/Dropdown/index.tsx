@@ -1,56 +1,54 @@
 // react
 import React, {
-  FC,
+  useCallback,
   useEffect,
   useState,
 } from "react";
 
 // local imports
 // utils
-import hasParentElemWihtDataset from "@utils/hasParentElemWihtDataset";
+import hasParentElemWithDataset from "@utils/hasParentElemWithDataset";
 
 // components
-import { Container, DropdownList } from "./style";
+import { Container, DropdownList } from "@components/Dropdown/style";
 
-type DropdownProps = {
+type DropdownProps<T> = {
   children: React.ReactNode;
-  items: DefaultItem[];
-  getIdFromItem?: (item: any) => string;
-  getNameFromItem?: (item: any) => string;
-  onClick?: (item: DefaultItem) => void;
+  items?: T[];
+  getIdFromItem?: (item: T) => string;
+  getNameFromItem?: (item: T) => string;
+  onSelect?: (item: T) => void;
 };
 
-const Dropdown: FC<DropdownProps> = ({
+function Dropdown<T extends DefaultItem>({
   children,
   getIdFromItem,
   getNameFromItem,
-  items,
-  onClick,
-}) => {
+  items = [],
+  onSelect,
+}: DropdownProps<T>) {
   const [open, setOpen] = useState(false);
 
-  const onFocusHandler = () => {
-    setOpen(true);
-  };
+  const onFocusHandler = useCallback(() => setOpen(true), []);
 
-  const onClickHandler = (item: DefaultItem) => {
-    onClick?.(item);
+  const onSelectHandler = useCallback((item: T) => {
+    onSelect?.(item);
     setOpen(false);
-  };
+  }, [onSelect]);
 
   useEffect(() => {
-    const click = (e: MouseEvent) => {
-      const check = hasParentElemWihtDataset(e, "idType", "select");
+    const clickHandler = (e: MouseEvent) => {
+      const check = hasParentElemWithDataset(e, "idType", "select");
 
       if (check) {
         setOpen(false);
       }
     };
 
-    if (open) window.addEventListener("click", click);
+    if (open) window.addEventListener("click", clickHandler);
 
     return () => {
-      window.removeEventListener("click", click);
+      window.removeEventListener("click", clickHandler);
     };
   }, [open]);
 
@@ -64,7 +62,7 @@ const Dropdown: FC<DropdownProps> = ({
               onFocusHandler();
               children.props?.onFocus?.();
             },
-          } as any) :
+          }) :
           null}
       </>
       {open && !!items?.length && (
@@ -72,7 +70,7 @@ const Dropdown: FC<DropdownProps> = ({
           {items.map(item => (
             <li
               key={getIdFromItem?.(item) ?? item.id}
-              onClick={() => onClickHandler(item)}
+              onClick={() => onSelectHandler(item)}
             >
               {getNameFromItem?.(item) ?? item.name}
             </li>
@@ -81,6 +79,6 @@ const Dropdown: FC<DropdownProps> = ({
       )}
     </Container>
   );
-};
+}
 
 export default Dropdown;

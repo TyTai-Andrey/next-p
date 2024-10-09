@@ -10,7 +10,10 @@ import RouterReducer from "./router/reducer";
 // Watchers
 import watchGames from "./games/watchers";
 
-const rootReducer = () => combineReducers({ games: GamesReducer, router: RouterReducer });
+const rootReducer = () => combineReducers({
+  games: GamesReducer,
+  router: RouterReducer,
+});
 
 type RootState = ReturnType<ReturnType<typeof rootReducer>>;
 

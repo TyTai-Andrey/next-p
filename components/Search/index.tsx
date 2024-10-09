@@ -1,7 +1,6 @@
 // react
 import {
   ChangeEvent,
-  FC,
   useCallback,
   useRef,
   useState,
@@ -16,23 +15,23 @@ import Input from "@components/Input";
 // utils
 import useDebounce from "@utils/useDebounce";
 
-type SearchProps = {
+type SearchProps<T> = {
   debounceDelay?: number;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   initValue?: string;
-  dropdownItems?: DefaultItem[];
+  dropdownItems?: T[];
   onSelect?: (item: { id: string }) => void;
   onClear?: () => void;
 }
 
-const Search: FC<SearchProps> = ({
+function Search<T extends DefaultItem>({
   debounceDelay,
   dropdownItems,
   initValue,
   onChange,
   onClear: onClearProp,
   onSelect,
-}) => {
+}: SearchProps<T>) {
   const $event = useRef<ChangeEvent<HTMLInputElement> | null>(null);
   const [value, setValue] = useState(initValue);
 
@@ -40,26 +39,26 @@ const Search: FC<SearchProps> = ({
     if (onChange && $event.current) onChange($event.current);
   }, [value]);
 
-  useDebounce(onChangeValue, debounceDelay);
-
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     $event.current = e;
   };
 
-  const onClear = () => {
+  const onClear = useCallback(() => {
     setValue("");
     onClearProp?.();
-  };
+  }, [onClearProp]);
+
+  useDebounce(onChangeValue, debounceDelay);
 
   return (
     <Container>
-      <Dropdown items={dropdownItems ?? []} onClick={onSelect}>
+      <Dropdown items={dropdownItems} onSelect={onSelect}>
         <Input onChange={onChangeHandler} placeholder="search" value={value} />
       </Dropdown>
       {!!value && <Clear onClick={onClear} />}
     </Container>
   );
-};
+}
 
 export default Search;

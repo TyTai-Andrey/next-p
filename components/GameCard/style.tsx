@@ -19,7 +19,8 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Info = styled.div<{ noPadding?: boolean }>`
+type InfoProps = { noPadding?: boolean; }
+const Info = styled.div<InfoProps>`
   box-sizing: content-box;
 
   position: absolute;
@@ -33,7 +34,8 @@ const Info = styled.div<{ noPadding?: boolean }>`
   width: calc(100% - 1em);
 `;
 
-const Image = styled(ImageNext) <{ minHeightImage?: number; noimg?: string }>`
+type ImageProps = { minHeightImage?: number; noimg?: string }
+const Image = styled(ImageNext) <ImageProps>`
   width: 100%;
   object-fit: cover;
   pointer-events: none;

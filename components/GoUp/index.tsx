@@ -1,5 +1,7 @@
-import { FC } from "react";
+// react
+import { FC, useCallback } from "react";
 
+// local imports
 // components
 import Container from "./style";
 
@@ -9,7 +11,7 @@ interface GoUpProps {
 }
 
 const GoUp: FC<GoUpProps> = ({ elem = document.documentElement, isVisibleUp }) => {
-  const onClickHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onClickHandler = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
 
     elem.scrollIntoView({
@@ -17,7 +19,7 @@ const GoUp: FC<GoUpProps> = ({ elem = document.documentElement, isVisibleUp }) =
       block: "start",
       inline: "nearest",
     });
-  };
+  }, [elem]);
 
   return isVisibleUp && <Container onClick={onClickHandler}>UP</Container>;
 };

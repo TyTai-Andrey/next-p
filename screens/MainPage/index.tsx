@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 // react
 import {
   FC,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -23,6 +24,7 @@ import { getGamesError, getGamesLoading } from "@store/slices/games/selectors";
 import GamesActions from "@store/slices/games/actions";
 
 // utils
+import { getParentPlatformsValue, sortButtonsFields } from "@screens/MainPage/utils";
 import usePushRouter from "@utils/usePushRouter";
 
 const GoUp = dynamic(() => import("@components/GoUp"), { ssr: false });
@@ -40,28 +42,30 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
 
   const [isVisibleUp, setIsVisibleUp] = useState(false);
   const [parentPlatformsValue, setParentPlatformsValue] = useState(
-    parentPlatforms?.find(i => String(i.id) === query?.get("parent_platforms"))
-      ?.name ?? "",
+    getParentPlatformsValue(parentPlatforms, query),
   );
 
+  const onChange = useCallback((item?: PlatformDetails, value?: string) => {
+    setParentPlatformsValue(item?.name ?? "");
+    pushRouterQuery("parent_platforms", value);
+  }, [pushRouterQuery]);
+
   useEffect(() => {
-    const onScroll = () => {
-      const windowRelativeTop = Math.abs(
-        document?.documentElement?.getBoundingClientRect()?.top || 0,
-      );
-      const windowRelativeBottom =
-        document.documentElement.getBoundingClientRect().bottom;
+    const scrollHandler = () => {
+      const rect = document?.documentElement?.getBoundingClientRect();
+      const windowRelativeTop = Math.abs(rect?.top || 0);
+      const windowRelativeBottom = rect?.bottom;
 
       setIsVisibleUp(windowRelativeTop >= 1500);
-      const go =
-        windowRelativeBottom < document.documentElement.clientHeight + 1000;
-      if (!error && !loading && go) dispatch(GamesActions.fetchGamesAsync());
+      const fetchAdditionalGames =
+        windowRelativeBottom < (document.documentElement.clientHeight + 1000);
+      if (!error && !loading && fetchAdditionalGames) dispatch(GamesActions.fetchGamesAsync());
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", scrollHandler);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", scrollHandler);
     };
   }, [loading, error]);
 
@@ -70,17 +74,11 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
       <H1>Games</H1>
       <SpaceColumn>
         <SortButtons
-          fields={[
-            { field: "released", title: "Released" },
-            { field: "rating", title: "Rating" },
-          ]}
+          fields={sortButtonsFields}
         />
         <Select
           items={parentPlatforms}
-          onChange={(item, value) => {
-            setParentPlatformsValue(item?.name ?? "");
-            pushRouterQuery("parent_platforms", value);
-          }}
+          onChange={onChange}
           placeholder="Platforms"
           value={parentPlatformsValue}
         />
