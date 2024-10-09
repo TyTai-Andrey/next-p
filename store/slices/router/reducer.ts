@@ -2,10 +2,10 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 // Actions
-import RouterActions from "./actions";
+import RouterActions from "@store/slices/router/actions";
 
 // Interfaces
-import InitState from "./interfaces";
+import InitState from "@store/slices/router/interfaces";
 
 const initialState: InitState = { router: undefined };
 

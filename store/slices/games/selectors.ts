@@ -1,4 +1,4 @@
-import type { RootState } from "..";
+import type { RootState } from "@store/slices";
 
 const getGamesReducer = (store: RootState) => store.games;
 

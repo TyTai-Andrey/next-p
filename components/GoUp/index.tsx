@@ -8,7 +8,7 @@ import {
 
 // local imports
 // components
-import Container from "./style";
+import Container from "@components/GoUp/style";
 
 interface GoUpProps {
   elem?: HTMLElement;

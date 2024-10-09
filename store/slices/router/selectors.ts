@@ -1,4 +1,4 @@
-import type { RootState } from "..";
+import type { RootState } from "@store/slices";
 
 const getRouterReducer = (store: RootState) => store.router;
 

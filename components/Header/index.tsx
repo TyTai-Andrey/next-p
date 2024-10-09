@@ -19,8 +19,8 @@ import { SpaceBetween } from "@components/Space";
 // api
 import GamesApi from "@api/GamesApi";
 
-// utils
-import usePushRouter from "@utils/usePushRouter";
+// hooks
+import usePushRouter from "@hooks/usePushRouter";
 
 // interfaces
 import IsNotErrorResponse from "@interfaces/checks";

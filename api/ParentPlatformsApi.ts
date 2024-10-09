@@ -1,4 +1,6 @@
-import BaseApi from "./BaseApi";
+// local imports
+// api
+import BaseApi from "@api/BaseApi";
 
 export default class ParentPlatformsApi {
   static async getList(params?: IPlatformListRequest):

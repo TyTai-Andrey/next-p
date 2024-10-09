@@ -1,4 +1,6 @@
-import BaseApi from "./BaseApi";
+// local imports
+// api
+import BaseApi from "@api/BaseApi";
 
 export default class GamesApi {
   static async getList(params: IGamesListRequest): Promise<ITypeOrError<IListResult<Game>>> {

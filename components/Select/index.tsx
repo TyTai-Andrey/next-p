@@ -13,7 +13,7 @@ import {
 
 // local imports
 // components
-import { Clear, Container } from "@components/Select/styled";
+import { Clear, Container } from "@components/Select/style";
 import Dropdown from "@components/Dropdown";
 import Input from "@components/Input";
 

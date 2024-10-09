@@ -4,11 +4,11 @@ import { all, call } from "redux-saga/effects";
 import { combineReducers } from "redux";
 
 // Reducers
-import GamesReducer from "./games/reducer";
-import RouterReducer from "./router/reducer";
+import GamesReducer from "@store/slices/games/reducer";
+import RouterReducer from "@store/slices/router/reducer";
 
 // Watchers
-import watchGames from "./games/watchers";
+import watchGames from "@store/slices/games/watchers";
 
 const rootReducer = () => combineReducers({
   games: GamesReducer,

@@ -25,8 +25,10 @@ import GamesActions from "@store/slices/games/actions";
 
 // utils
 import { getParentPlatformsValue, sortButtonsFields } from "@screens/MainPage/utils";
-import usePushRouter from "@utils/usePushRouter";
-import useQueryObserver from "@utils/useQueryObserver";
+
+// hooks
+import usePushRouter from "@hooks/usePushRouter";
+import useQueryObserver from "@hooks/useQueryObserver";
 
 const GoUp = dynamic(() => import("@components/GoUp"), { ssr: false });
 

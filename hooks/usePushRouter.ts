@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 
 // utils
-import formattedQuery from "./formattedQuery";
+import formattedQuery from "@utils/formattedQuery";
 
 type PushPouter = (path: string, routerParams?: ObjectType<string>) => void;
 type PushRouterQuery = (searchParamName: string, param?: string | number | null) => void;

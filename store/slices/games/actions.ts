@@ -2,7 +2,7 @@
 import { createAction } from "@reduxjs/toolkit";
 
 // Types
-import GamesTypes from "./types";
+import GamesTypes from "@store/slices/games/types";
 
 const GamesActions = {
   // Async

@@ -9,8 +9,10 @@ import {
 import { getClientAxios } from "@api/BaseApi";
 
 // Actions
-import GamesActions from "./actions";
-import { getGamesNext } from "./selectors";
+import GamesActions from "@store/slices/games/actions";
+
+// Selectors
+import { getGamesNext } from "@store/slices/games/selectors";
 
 function* fetchGames() {
   const next: string = yield select(getGamesNext);

@@ -11,7 +11,7 @@ import {
 } from "@store/slices";
 
 // interfaces
-import MyStore from "./interfaces";
+import MyStore from "@store/interfaces";
 
 const sagaMiddleware = createSagaMiddleware();
 

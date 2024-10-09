@@ -2,10 +2,10 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 // Actions
-import GamesActions from "./actions";
+import GamesActions from "@store/slices/games/actions";
 
 // Interfaces
-import InitState from "./interfaces";
+import InitState from "@store/slices/games/interfaces";
 
 const initialState: InitState = {
   data: {

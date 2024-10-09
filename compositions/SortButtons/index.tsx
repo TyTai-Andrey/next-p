@@ -16,12 +16,14 @@ import {
   getSortDirection,
   getSortDirectionSign,
 } from "@compositions/SortButtons/utils";
-import usePushRouter from "@utils/usePushRouter";
+
+// hooks
+import usePushRouter from "@hooks/usePushRouter";
+import useQueryObserver from "@hooks/useQueryObserver";
 
 // components
 import Button from "@compositions/SortButtons/style";
 import { Space } from "@components/Space";
-import useQueryObserver from "@utils/useQueryObserver";
 
 interface SortButtonProps {
   fields: { field: string, title: string }[]

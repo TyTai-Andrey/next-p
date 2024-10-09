@@ -6,10 +6,10 @@ import {
 } from "redux-saga/effects";
 
 // Types
-import GamesTypes from "./types";
+import GamesTypes from "@store/slices/games/types";
 
 // Workers
-import fetchGames from "./workers";
+import fetchGames from "@store/slices/games/workers";
 
 function* watchFetchGames() {
   yield takeLatest(GamesTypes.FETCH_GAMES_ASYNC, fetchGames);

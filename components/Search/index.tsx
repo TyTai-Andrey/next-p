@@ -8,12 +8,12 @@ import {
 
 // local imports
 // components
-import { Clear, Container } from "@components/Search/styled";
+import { Clear, Container } from "@components/Search/style";
 import Dropdown from "@components/Dropdown";
 import Input from "@components/Input";
 
-// utils
-import useDebounce from "@utils/useDebounce";
+// hooks
+import useDebounce from "@hooks/useDebounce";
 
 type SearchProps<T> = {
   debounceDelay?: number;
