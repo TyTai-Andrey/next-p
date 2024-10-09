@@ -26,6 +26,7 @@ import GamesActions from "@store/slices/games/actions";
 // utils
 import { getParentPlatformsValue, sortButtonsFields } from "@screens/MainPage/utils";
 import usePushRouter from "@utils/usePushRouter";
+import useQueryObserver from "@utils/useQueryObserver";
 
 const GoUp = dynamic(() => import("@components/GoUp"), { ssr: false });
 
@@ -40,7 +41,6 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
   const loading = useSelector(getGamesLoading);
   const error = useSelector(getGamesError);
 
-  const [isVisibleUp, setIsVisibleUp] = useState(false);
   const [parentPlatformsValue, setParentPlatformsValue] = useState(
     getParentPlatformsValue(parentPlatforms, query),
   );
@@ -50,13 +50,18 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
     pushRouterQuery("parent_platforms", value);
   }, [pushRouterQuery]);
 
+  const onChangeQueryParentPlatforms = useCallback(
+    () => setParentPlatformsValue(getParentPlatformsValue(parentPlatforms, query)),
+    [parentPlatforms],
+  );
+
+  useQueryObserver(onChangeQueryParentPlatforms, "parent_platforms");
+
   useEffect(() => {
     const scrollHandler = () => {
       const rect = document?.documentElement?.getBoundingClientRect();
-      const windowRelativeTop = Math.abs(rect?.top || 0);
       const windowRelativeBottom = rect?.bottom;
 
-      setIsVisibleUp(windowRelativeTop >= 1500);
       const fetchAdditionalGames =
         windowRelativeBottom < (document.documentElement.clientHeight + 1000);
       if (!error && !loading && fetchAdditionalGames) dispatch(GamesActions.fetchGamesAsync());
@@ -84,7 +89,7 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
         />
         <GameCardsList />
       </SpaceColumn>
-      <GoUp isVisibleUp={isVisibleUp} />
+      <GoUp />
     </>
   );
 };

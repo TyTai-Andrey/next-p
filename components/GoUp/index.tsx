@@ -1,5 +1,10 @@
 // react
-import { FC, useCallback } from "react";
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 // local imports
 // components
@@ -7,12 +12,14 @@ import Container from "./style";
 
 interface GoUpProps {
   elem?: HTMLElement;
-  isVisibleUp?: boolean;
 }
 
-const GoUp: FC<GoUpProps> = ({ elem = document.documentElement, isVisibleUp }) => {
+const GoUp: FC<GoUpProps> = ({ elem = document.documentElement }) => {
+  const [isVisibleUp, setIsVisibleUp] = useState(false);
+
   const onClickHandler = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+    setIsVisibleUp(false);
 
     elem.scrollIntoView({
       behavior: "smooth",
@@ -20,6 +27,21 @@ const GoUp: FC<GoUpProps> = ({ elem = document.documentElement, isVisibleUp }) =
       inline: "nearest",
     });
   }, [elem]);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      const rect = document?.documentElement?.getBoundingClientRect();
+      const windowRelativeTop = Math.abs(rect?.top || 0);
+
+      setIsVisibleUp(windowRelativeTop >= 1500);
+    };
+
+    window.addEventListener("scroll", scrollHandler);
+
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
 
   return isVisibleUp && <Container onClick={onClickHandler}>UP</Container>;
 };

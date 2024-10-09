@@ -1,3 +1,6 @@
+// vendor imports
+import { v4 as uuid } from "uuid";
+
 // react
 import {
   ChangeEvent,
@@ -51,7 +54,7 @@ function Select<T extends DefaultItem>({
   const onSelectHandler = useCallback((item: T) => {
     setValue(getNameFromItem?.(item) ?? item.name);
     onChange?.(item, getIdFromItem?.(item) ?? item?.id);
-  }, []);
+  }, [getIdFromItem, getNameFromItem, onChange]);
 
   const onFocus = useCallback(() => {
     setValue("");
@@ -59,9 +62,7 @@ function Select<T extends DefaultItem>({
   }, [_items]);
 
   const onBlur = useCallback(() => {
-    setTimeout(() => {
-      update();
-    }, 100);
+    update();
   }, [update]);
 
   const onClear = useCallback(() => {
@@ -84,7 +85,11 @@ function Select<T extends DefaultItem>({
 
   return (
     <Container>
-      <Dropdown items={items} onSelect={onSelectHandler}>
+      <Dropdown
+        id={`select${uuid()}`}
+        items={items}
+        onSelect={onSelectHandler}
+      >
         <Input
           onBlur={onBlur}
           onChange={onChangeHandler}

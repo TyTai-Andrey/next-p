@@ -1,18 +1,27 @@
-const hasParentElemWithDataset = (
-  e: MouseEvent,
+interface ISearchParentElemWithDataset {
+  event: MouseEvent,
   datasetName: string,
   datasetValue: string,
-  callback?: () => void,
-) => {
-  let foundDataset = true;
-  let { target } = e as any;
+  successCallback?: () => void,
+  failCallback?: () => void
+}
+
+const searchParentElemWithDataset = ({
+  datasetName,
+  datasetValue,
+  event,
+  failCallback,
+  successCallback,
+}: ISearchParentElemWithDataset) => {
+  let hasParentElemWithDataset = false;
+  let { target } = event as any;
   let isSearchDataset = true;
 
   while (isSearchDataset) {
     if (target) {
       if (target?.dataset?.[datasetName] === datasetValue) {
         isSearchDataset = false;
-        foundDataset = false;
+        hasParentElemWithDataset = true;
       } else {
         target = target?.parentNode;
       }
@@ -21,11 +30,13 @@ const hasParentElemWithDataset = (
     }
   }
 
-  if (foundDataset) {
-    callback?.();
+  if (hasParentElemWithDataset) {
+    successCallback?.();
+  } else {
+    failCallback?.();
   }
 
-  return foundDataset;
+  return { hasParentElemWithDataset, target };
 };
 
-export default hasParentElemWithDataset;
+export default searchParentElemWithDataset;

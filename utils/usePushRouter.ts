@@ -1,4 +1,8 @@
+// next
 import { useRouter } from "next/router";
+
+// utils
+import formattedQuery from "./formattedQuery";
 
 type PushPouter = (path: string, routerParams?: ObjectType<string>) => void;
 type PushRouterQuery = (searchParamName: string, param?: string | number | null) => void;
@@ -27,11 +31,11 @@ const usePushRouter = (): IUsePushRouter => {
     }
 
     router.push(
-      path + (query.toString()?.length ? `?${query.toString()}` : ""),
+      path + formattedQuery(query),
     );
   };
   const pushRouterQuery: PushRouterQuery = (searchParamName, param) => {
-    const query = new URLSearchParams(router.query as any);
+    const query = new URLSearchParams(router.query as ObjectType<string>);
     if (query.has(searchParamName)) {
       query.delete(searchParamName);
     }
@@ -41,11 +45,11 @@ const usePushRouter = (): IUsePushRouter => {
       query.set(searchParamName, String(param));
     }
 
-    router.push(query.toString()?.length ? `?${query.toString()}` : "/");
+    router?.push(formattedQuery(query, "/"));
   };
 
   const pushRouterQueryList: PushRouterQueryList = (routerParams) => {
-    const query = new URLSearchParams(router.query as any);
+    const query = new URLSearchParams(router.query as ObjectType<string>);
 
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const searchParamName in routerParams) {
@@ -59,7 +63,7 @@ const usePushRouter = (): IUsePushRouter => {
       }
     }
 
-    router.push(query.toString()?.length ? `?${query.toString()}` : "/");
+    router?.push(formattedQuery(query, "/"));
   };
 
   return {

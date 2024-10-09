@@ -7,7 +7,7 @@ import React, {
 
 // local imports
 // utils
-import hasParentElemWithDataset from "@utils/hasParentElemWithDataset";
+import searchParentElemWithDataset from "@utils/hasParentElemWithDataset";
 
 // components
 import { Container, DropdownList } from "@components/Dropdown/style";
@@ -18,13 +18,17 @@ type DropdownProps<T> = {
   getIdFromItem?: (item: T) => string;
   getNameFromItem?: (item: T) => string;
   onSelect?: (item: T) => void;
+  onBlur?: () => void
+  id?: string
 };
 
 function Dropdown<T extends DefaultItem>({
   children,
   getIdFromItem,
   getNameFromItem,
+  id = "dropdown",
   items = [],
+  onBlur,
   onSelect,
 }: DropdownProps<T>) {
   const [open, setOpen] = useState(false);
@@ -38,11 +42,16 @@ function Dropdown<T extends DefaultItem>({
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
-      const check = hasParentElemWithDataset(e, "idType", "select");
-
-      if (check) {
-        setOpen(false);
-      }
+      searchParentElemWithDataset({
+        datasetName: "idType",
+        datasetValue: id,
+        event: e,
+        failCallback: () => {
+          (children as ObjectType<any>)?.props?.onBlur?.();
+          onBlur?.();
+          setOpen(false);
+        },
+      });
     };
 
     if (open) window.addEventListener("click", clickHandler);
@@ -50,14 +59,15 @@ function Dropdown<T extends DefaultItem>({
     return () => {
       window.removeEventListener("click", clickHandler);
     };
-  }, [open]);
+  }, [open, id]);
 
   return (
-    <Container data-id-type="select">
+    <Container data-id-type={id}>
       <>
         {React.isValidElement(children) ?
           React.cloneElement(children, {
             ...children.props,
+            onBlur: undefined,
             onFocus: () => {
               onFocusHandler();
               children.props?.onFocus?.();

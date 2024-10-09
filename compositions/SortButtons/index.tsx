@@ -5,17 +5,23 @@ import { useSearchParams } from "next/navigation";
 import {
   FC,
   useCallback,
-  useEffect,
+  useMemo,
   useState,
 } from "react";
 
 // local imports
 // utils
+import {
+  getSortBy,
+  getSortDirection,
+  getSortDirectionSign,
+} from "@compositions/SortButtons/utils";
 import usePushRouter from "@utils/usePushRouter";
 
 // components
 import Button from "@compositions/SortButtons/style";
 import { Space } from "@components/Space";
+import useQueryObserver from "@utils/useQueryObserver";
 
 interface SortButtonProps {
   fields: { field: string, title: string }[]
@@ -25,33 +31,27 @@ const SortButtons: FC<SortButtonProps> = ({ fields }) => {
   const query = useSearchParams();
   const { pushRouterQuery } = usePushRouter();
 
-  const [sortBy, setSortBy] = useState(() => query?.get("ordering")?.replace("-", ""));
+  const ordering = useMemo(() => query?.get("ordering"), [query?.get("ordering")]);
 
-  const [sortDirection, setSortDirection] = useState(() => {
-    const ordering = query?.get("ordering");
-    if (ordering) {
-      return /-/.test(ordering) ? "Asc" : "Desc";
-    }
-    return undefined;
-  });
+  const [sortBy, setSortBy] = useState(() => getSortBy(ordering));
+  const [sortDirection, setSortDirection] = useState<ISortDirection>(
+    () => (ordering ? getSortDirection(ordering) : undefined),
+  );
 
   const changeFieldSort = useCallback(
     (name: string) => {
-      let newSortDirection: "Asc" | "Desc" | null = null;
-      const sortBy = query?.get("ordering")?.replace("-", "");
-      if (sortBy === name) {
-        if (!sortDirection) newSortDirection = "Asc";
-        if (sortDirection === "Asc") newSortDirection = "Desc";
-      } else {
-        newSortDirection = "Asc";
-      }
+      let newSortDirection: ISortDirection;
+
+      if (sortBy !== name) newSortDirection = "Asc";
+      if (sortBy === name && !sortDirection) newSortDirection = "Asc";
+      if (sortBy === name && sortDirection === "Asc") newSortDirection = "Desc";
 
       pushRouterQuery(
         "ordering",
-        newSortDirection && `${newSortDirection === "Asc" ? "-" : ""}${name}`,
+        newSortDirection ? `${getSortDirectionSign(newSortDirection)}${name}` : undefined,
       );
     },
-    [query, sortDirection],
+    [pushRouterQuery, sortBy, sortDirection],
   );
 
   const getArrow = useCallback(
@@ -64,16 +64,12 @@ const SortButtons: FC<SortButtonProps> = ({ fields }) => {
     [sortBy, sortDirection],
   );
 
-  useEffect(() => {
-    const ordering = query?.get("ordering");
-    if (ordering) {
-      setSortDirection(/-/.test(ordering) ? "Asc" : "Desc");
-      setSortBy(ordering?.replace("-", ""));
-    } else {
-      setSortDirection(undefined);
-      setSortBy(undefined);
-    }
-  }, [query?.get("ordering")]);
+  const onChangeQueryOrdering = useCallback((ordering: string | null) => {
+    setSortDirection(ordering ? getSortDirection(ordering) : undefined);
+    setSortBy(ordering ? getSortBy(ordering) : undefined);
+  }, []);
+
+  useQueryObserver(onChangeQueryOrdering, "ordering");
 
   return (
     <Space>

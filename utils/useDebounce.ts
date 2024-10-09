@@ -1,7 +1,7 @@
 // react
 import { useEffect } from "react";
 
-const _debounceDelay = 500;
+const _debounceDelay = 550;
 
 type UseDebounce = (func: () => void, debounceDelay?: number) => void;
 

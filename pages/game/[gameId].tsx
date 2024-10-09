@@ -35,7 +35,7 @@ export default Game;
 
 type GetPathsIdsProps = (first?: boolean, url?: string) => Promise<{ params: { gameId: string } }[]>;
 
-const getPathsIds: GetPathsIdsProps = async (first, url = `${process.env.API_BASE_URL}/games`) => {
+const getPathsIds: GetPathsIdsProps = async (first, url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/games`) => {
   const data = await BaseApi.getList<IListResult<Game>>({
     baseURL: url,
     method: "GET",

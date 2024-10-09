@@ -1,3 +1,4 @@
+// vendor imports
 import axios, { AxiosRequestConfig } from "axios";
 
 export const getClientAxios = axios.create({ headers: { Accept: "application/json" } });
@@ -5,9 +6,9 @@ export const getClientAxios = axios.create({ headers: { Accept: "application/jso
 export default class BaseApi {
   static getClient() {
     return axios.create({
-      baseURL: process.env.API_BASE_URL,
+      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
       headers: { Accept: "application/json" },
-      params: { key: process.env.API_KEY },
+      params: { key: process.env.NEXT_PUBLIC_API_KEY },
     });
   }
 
