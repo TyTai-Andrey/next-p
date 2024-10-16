@@ -2,7 +2,7 @@
 import Head from "next/head";
 
 // react
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 // local imports
 // api
@@ -11,7 +11,12 @@ import GamesApi from "@api/GamesApi";
 
 // components
 import GamePage from "@screens/GamePage";
-import IsNotErrorResponse from "@interfaces/checks";
+
+// types
+import { IsNotErrorResponse } from "@interfaces/checks";
+
+// hooks
+import useGame from "@hooks/useGame";
 
 interface GameProps {
   game: GameDetails;
@@ -20,6 +25,16 @@ interface GameProps {
 
 const Game: FC<GameProps> = ({ game, screenshotsData }) => {
   const { results: images } = screenshotsData || { results: [] };
+  const { setGame } = useGame();
+
+  useEffect(() => {
+    setGame(game);
+
+    return () => {
+      setGame(null);
+    };
+  }, [game]);
+
   return (
     <>
       <Head>
@@ -35,7 +50,7 @@ export default Game;
 
 type GetPathsIdsProps = (first?: boolean, url?: string) => Promise<{ params: { gameId: string } }[]>;
 
-const getPathsIds: GetPathsIdsProps = async (first, url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/games`) => {
+const getPathsIds: GetPathsIdsProps = async (first, url = `${process.env.NEXT_PUBLIC_API_GAME_BASE_URL}/games`) => {
   const data = await BaseApi.getList<IListResult<Game>>({
     baseURL: url,
     method: "GET",

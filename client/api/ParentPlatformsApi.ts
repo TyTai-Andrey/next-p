@@ -5,7 +5,7 @@ import BaseApi from "@api/BaseApi";
 export default class ParentPlatformsApi {
   static async getList(params?: IPlatformListRequest):
     Promise<ITypeOrError<IListResult<PlatformDetails>>> {
-    const client = BaseApi.getClient();
+    const client = BaseApi.getClientGames();
     const options = {
       method: "GET",
       params,

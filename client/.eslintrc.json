@@ -42,15 +42,9 @@
     ],
     "class-methods-use-this": "off",
     "function-paren-newline": "off",
+    "react/display-name": "off",
     "import/extensions": "off",
-    "import/no-unresolved": [
-      "error",
-      {
-        "ignore": [
-          "next"
-        ]
-      }
-    ],
+    "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off",
     "import/no-anonymous-default-export": "error",
     "indent": [
@@ -95,7 +89,7 @@
     "no-empty": "off",
     "no-nested-ternary": "off",
     "no-use-before-define": [
-      "error",
+      "warn",
       {
         "functions": false,
         "classes": true

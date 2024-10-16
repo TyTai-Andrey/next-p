@@ -3,6 +3,8 @@ import {
   ChangeEvent,
   FC,
   useCallback,
+  useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -12,7 +14,12 @@ import { useSearchParams } from "next/navigation";
 
 // local imports
 // components
-import { Container, LinksContainer } from "@components/Header/style";
+import {
+  Button,
+  Container,
+  LinksContainer,
+} from "@components/Header/style";
+import RegisterModal from "@compositions/RegisterModal";
 import Search from "@components/Search";
 import { SpaceBetween } from "@components/Space";
 
@@ -20,10 +27,13 @@ import { SpaceBetween } from "@components/Space";
 import GamesApi from "@api/GamesApi";
 
 // hooks
+import useAuth from "@hooks/useAuth";
+import useGame from "@hooks/useGame";
+import useModal from "@hooks/useModal";
 import usePushRouter from "@hooks/usePushRouter";
 
 // interfaces
-import IsNotErrorResponse from "@interfaces/checks";
+import { IsErrorResponse, IsNotErrorResponse } from "@interfaces/checks";
 
 type HeaderProps = {
   withSearch?: boolean;
@@ -31,8 +41,13 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ withSearch }) => {
   const [dropdownItems, setDropdownItems] = useState<Game[]>([]);
+  const [isGameAdded, setIsGameAdded] = useState<null | boolean>(null);
+
   const { pushRouter } = usePushRouter();
   const query = useSearchParams();
+  const { logout, token } = useAuth();
+  const { openModal } = useModal();
+  const { game } = useGame();
 
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const search = e?.target?.value;
@@ -51,6 +66,63 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
 
   const onClear = useCallback(() => setDropdownItems([]), []);
 
+  const onInput = useCallback(() => {
+    openModal(RegisterModal);
+  }, [openModal]);
+
+  const addGameHandler = useCallback(async () => {
+    if (game) {
+      const data = {
+        name: game.name,
+        rating: String(game.rating),
+        released: game.released,
+      };
+
+      const res = await GamesApi.addGameById(game.id, data);
+
+      if (IsNotErrorResponse(res)) {
+        setIsGameAdded(true);
+      }
+    }
+  }, [game]);
+
+  const removeGameHandler = useCallback(async () => {
+    if (game) {
+      const res = await GamesApi.removeGameById(game.id);
+
+      if (IsNotErrorResponse(res)) {
+        setIsGameAdded(false);
+      }
+    }
+  }, [game]);
+
+  const button = useMemo(() => {
+    if (isGameAdded === null || !token || !game) return null;
+    if (isGameAdded) return <Button onClick={removeGameHandler}>Remove Game</Button>;
+    return <Button onClick={addGameHandler}>Add Game</Button>;
+  }, [addGameHandler, game, isGameAdded, removeGameHandler, token]);
+
+  const intervalHandler = useCallback(async () => {
+    if (game && token) {
+      const response = await GamesApi.isGameAdded(game.id);
+      if (!IsErrorResponse(response)) {
+        setIsGameAdded(response.result);
+      } else {
+        setIsGameAdded(null);
+      }
+    }
+  }, [game, token]);
+
+  useEffect(() => {
+    // TODO: add ws
+    intervalHandler();
+    const interval = setInterval(intervalHandler, 2500);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [intervalHandler]);
+
   return (
     <Container>
       <SpaceBetween>
@@ -66,6 +138,8 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
             onSelect={onSelect}
           />
         )}
+        {button}
+        <Button onClick={token ? logout : onInput}>{token ? "Logout" : "Input"}</Button>
       </SpaceBetween>
     </Container>
   );

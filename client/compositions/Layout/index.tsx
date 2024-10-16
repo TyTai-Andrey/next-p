@@ -12,7 +12,10 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout: FC<LayoutProps> = ({ children, withSearchHeader }) => (
+const Layout: FC<LayoutProps> = ({
+  children,
+  withSearchHeader,
+}) => (
   <>
     <Header withSearch={withSearchHeader} />
     <Main>{children}</Main>

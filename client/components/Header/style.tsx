@@ -19,4 +19,21 @@ const LinksContainer = styled.div`
   font-size: 1.8em;
 `;
 
-export { Container, LinksContainer };
+const Button = styled.button`
+  margin: 0 0 0 10px;
+
+  background-color: inherit;
+  color: white;
+  font-size: 1.3em;
+
+  cursor: pointer;
+  
+  border: none;
+  outline: none;
+`;
+
+export {
+  Button,
+  Container,
+  LinksContainer,
+};

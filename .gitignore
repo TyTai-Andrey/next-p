@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# dependencies server
+/server/node_modules
+
+# production server
+/server/build
+
 # dependencies
 /client/node_modules
 /client/.pnp
