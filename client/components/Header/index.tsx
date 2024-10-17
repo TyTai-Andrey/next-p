@@ -66,7 +66,7 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
 
   const onClear = useCallback(() => setDropdownItems([]), []);
 
-  const onInput = useCallback(() => {
+  const onLogin = useCallback(() => {
     openModal(RegisterModal);
   }, [openModal]);
 
@@ -139,7 +139,7 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
           />
         )}
         {button}
-        <Button onClick={token ? logout : onInput}>{token ? "Logout" : "Input"}</Button>
+        <Button onClick={token ? logout : onLogin}>{token ? "Logout" : "Login"}</Button>
       </SpaceBetween>
     </Container>
   );
