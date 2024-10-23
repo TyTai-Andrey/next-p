@@ -1,4 +1,4 @@
-import pkg from 'mongoose';
+import pkg, { Document } from 'mongoose';
 const { Schema, model } = pkg;
 
 const schema = new Schema({
@@ -8,6 +8,6 @@ const schema = new Schema({
   gameId: { type: String, required: true },
 });
 
-const Game = model('Game', schema)
+const Game = model<IGame & Document>('Game', schema)
 
 export default Game;

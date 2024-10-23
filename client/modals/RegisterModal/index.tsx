@@ -11,12 +11,12 @@ import {
   StyledH1,
   StyledInput,
   Text,
-} from "@compositions/RegisterModal/style";
-import Modal from "@components/Modal";
+} from "@modals/RegisterModal/style";
+import Modal from "@modals/Modal";
 
 // types
 import { IsErrorResponse } from "@interfaces/checks";
-import type { ModalComponentProps } from "@compositions/ModalProvider";
+import type { ModalComponentProps } from "@providers/ModalProvider";
 
 // hooks
 import useAuth from "@hooks/useAuth";

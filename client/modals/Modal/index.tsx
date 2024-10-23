@@ -15,7 +15,7 @@ import {
   Close,
   Container,
   Content,
-} from "@components/Modal/style";
+} from "@modals/Modal/style";
 
 export interface ModalProps {
   children?: React.ReactNode | ((data: any) => React.ReactNode);

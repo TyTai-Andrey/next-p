@@ -9,10 +9,10 @@ import appWithRedux from "@hocs/appWithRedux";
 import "@styles/globals.css";
 
 // components
-import AuthProvider from "@compositions/AuthProvider";
-import GameProvider from "@compositions/GameProvider";
+import AuthProvider from "@providers/AuthProvider";
+import GameProvider from "@providers/GameProvider";
 import Layout from "@compositions/Layout";
-import ModalProvider from "@compositions/ModalProvider";
+import ModalProvider from "@providers/ModalProvider";
 
 const App = ({ Component, pageProps }: AppProps & { Component: { withSearchHeader?: boolean } }) => (
   <AuthProvider>

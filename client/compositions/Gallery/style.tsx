@@ -13,13 +13,15 @@ const Container = styled.div`
   margin: 1em 0;
 `;
 
-const GalleryLine = styled.div<{ currentScreenshotIdx: number, count: number }>`
+const GalleryLine = styled.div<{ $currentScreenshotIdx: number, $count: number }>`
   display: flex;
   flex-wrap: nowrap;
-  width: ${({ count }) => `calc(calc(100% - 2em) * ${count})`};
+  width: ${({ $count }) => `calc(calc(100% - 2em) * ${$count})`};
   width: 100%;
 
-  translate: ${({ currentScreenshotIdx }) => `calc(-100% * ${currentScreenshotIdx})`};
+  translate: ${({ $currentScreenshotIdx }) => `calc(-100% * ${$currentScreenshotIdx})`};
+
+  transition: translate 0.5s ease;
 
   height: 500px;
 `;
@@ -39,7 +41,7 @@ const Window = styled.div`
   width: 100%;
 `;
 
-const Button = styled.button<{ right?: boolean; left?: boolean; }>`
+const Button = styled.button<{ $right?: boolean; $left?: boolean; }>`
   position: absolute;
   z-index: 10;
   border: 1px solid #fff;
@@ -69,8 +71,8 @@ const Button = styled.button<{ right?: boolean; left?: boolean; }>`
     height: 2em;
   }
 
-  ${({ left }) => left && css`left: 10px;`};
-  ${({ right }) => right && css`right: 10px;`};
+  ${({ $left }) => $left && css`left: 10px;`};
+  ${({ $right }) => $right && css`right: 10px;`};
 `;
 
 export {

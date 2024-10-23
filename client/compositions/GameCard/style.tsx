@@ -6,7 +6,7 @@ import LinkNext from "next/link";
 import styled, { css } from "styled-components";
 
 // components
-import H1 from "@components/H1";
+import H1 from "@components/Texts";
 import { SpaceBetween } from "@components/Space";
 
 const Container = styled.div`
@@ -34,19 +34,19 @@ const Info = styled.div<InfoProps>`
   width: calc(100% - 1em);
 `;
 
-type ImageProps = { minHeightImage?: number; noimg?: string }
+type ImageProps = { $minHeightImage?: number; $noImg?: string }
 const Image = styled(ImageNext) <ImageProps>`
   width: 100%;
   object-fit: cover;
   pointer-events: none;
 
-  ${({ minHeightImage }) => minHeightImage && css`
+  ${({ $minHeightImage }) => $minHeightImage && css`
     height: auto;
-    min-height: ${minHeightImage}px;
+    min-height: ${$minHeightImage}px;
     max-height: 600px;
     object-position: top;
   `};
-  ${({ minHeightImage, noimg }) => noimg && minHeightImage && css`
+  ${({ $minHeightImage, $noImg }) => $noImg && $minHeightImage && css`
     object-position: center;
     object-fit: contain;
   `};

@@ -10,7 +10,7 @@ import {
   Link,
   StyledH1,
   StyledSpaceBetween,
-} from "@components/GameCard/style";
+} from "@compositions/GameCard/style";
 import { SpaceBetween } from "@components/Space";
 
 // images
@@ -36,11 +36,11 @@ const GameCard: FC<GameCardProps> = ({
   return (
     <Container>
       <Image
+        $minHeightImage={minHeightImage}
+        $noImg={!game?.background_image ? "true" : undefined}
         alt={game?.name}
         height={300}
         loading="eager"
-        minHeightImage={minHeightImage}
-        noimg={!game?.background_image ? "true" : undefined}
         priority={priority}
         sizes="100vw"
         src={game?.background_image ?? noImg}

@@ -5,7 +5,7 @@ import { FC } from "react";
 // components
 import { Container, Description } from "@screens/GamePage/style";
 import Gallery from "@compositions/Gallery";
-import GameCard from "@components/GameCard";
+import GameCard from "@compositions/GameCard";
 
 interface GamePageProps {
   game: GameDetails;

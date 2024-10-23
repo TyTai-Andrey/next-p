@@ -77,9 +77,7 @@ const SortButtons: FC<SortButtonProps> = ({ fields }) => {
     <Space>
       {fields.map(({ field, title }) => (
         <Button key={field} onClick={() => changeFieldSort(field)}>
-          <>
-            {title} {getArrow(field)}
-          </>
+          {title} {getArrow(field)}
         </Button>
       ))}
     </Space>

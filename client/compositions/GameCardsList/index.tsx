@@ -10,7 +10,7 @@ import { getGamesResult } from "@store/slices/games/selectors";
 
 // components
 import Container from "@compositions/GameCardsList/style";
-import GameCard from "@components/GameCard";
+import GameCard from "@compositions/GameCard";
 
 const GameCardsList = () => {
   const data = useSelector(getGamesResult);

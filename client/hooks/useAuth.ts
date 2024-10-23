@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 // local imports
 // components
-import { AuthContext } from "@compositions/AuthProvider";
+import { AuthContext } from "@providers/AuthProvider";
 
 const useAuth = () => {
   const value = useContext(AuthContext);

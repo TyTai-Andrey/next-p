@@ -6,7 +6,7 @@ import NextLink from "next/link";
 
 // local imports
 // components
-import H1 from "@components/H1";
+import H1 from "@components/Texts";
 import Input from "@components/Input";
 
 const Text = styled.p`

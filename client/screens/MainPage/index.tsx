@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 // local imports
 // components
 import GameCardsList from "@compositions/GameCardsList";
-import H1 from "@components/H1";
+import H1 from "@components/Texts";
 import Select from "@components/Select";
 import SortButtons from "@compositions/SortButtons";
 import { SpaceColumn } from "@components/Space";

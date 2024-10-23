@@ -40,8 +40,14 @@
       "@interfaces/*": [
         "./interfaces/*"
       ],
+      "@modals/*": [
+        "./modals/*"
+      ],
       "@pages/*": [
         "./pages/*"
+      ],
+      "@providers/*": [
+        "./providers/*"
       ],
       "@public/*": [
         "./public/*"

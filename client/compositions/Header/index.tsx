@@ -18,8 +18,8 @@ import {
   Button,
   Container,
   LinksContainer,
-} from "@components/Header/style";
-import RegisterModal from "@compositions/RegisterModal";
+} from "@compositions/Header/style";
+import RegisterModal from "@modals/RegisterModal";
 import Search from "@components/Search";
 import { SpaceBetween } from "@components/Space";
 

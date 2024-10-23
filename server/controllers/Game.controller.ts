@@ -24,6 +24,10 @@ class GameController {
 
   async getOwnerList(ownerId: string) {
     const user = await User.findOne({ login: ownerId });
+
+    if (!user) {
+      return [];
+    }
     const games = await Game.find({ _id: user.games });
 
     return games;
@@ -36,6 +40,10 @@ class GameController {
   async isGameAdded(userId: string, gameId: string) {
     const user = await User.findOne({ _id: userId });
     const game = await Game.findOne({ gameId });
+
+    if (!user || !game) {
+      return false;
+    }
 
     return user?.games?.includes(game?._id);
   }

@@ -56,6 +56,13 @@ class CallbackHandlers {
         )
         return bot.answerCallbackQuery(this.query.id)
       }
+      if (!user) {
+        await this._editMessageText(
+          `Пользователь не найден`,
+          keyboard.main
+        )
+        return bot.answerCallbackQuery(this.query.id)
+      }
       await User.updateOne({ _id: user._id }, { $pullAll: { games: [{ _id: game?._id }] } }, { new: true });
 
       const result = await GameController.getOwnerList(String(this.chatId));
@@ -75,6 +82,14 @@ class CallbackHandlers {
   async onShowOneGame() {
     try {
       const game = await GameController.getOne(this.data.gameId);
+
+      if (!game) {
+        await this._editMessageText(
+          `Игра не найдена`,
+          keyboard.main
+        )
+        return bot.answerCallbackQuery(this.query.id)
+      }
 
       await bot.editMessageText(
         combineIntoString([

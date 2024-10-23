@@ -4,7 +4,7 @@ import { FC } from "react";
 // local imports
 // components
 import Footer from "@components/Footer";
-import Header from "@components/Header";
+import Header from "@compositions/Header";
 import Main from "@components/Main";
 
 interface LayoutProps {

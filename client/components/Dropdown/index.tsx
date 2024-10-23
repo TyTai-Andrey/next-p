@@ -11,6 +11,7 @@ import searchParentElemWithDataset from "@utils/hasParentElemWithDataset";
 
 // components
 import { Container, DropdownList } from "@components/Dropdown/style";
+import DropdownItem from "@components/Dropdown/DropdownItem";
 
 type DropdownProps<T> = {
   children: React.ReactNode;
@@ -78,12 +79,11 @@ function Dropdown<T extends DefaultItem>({
       {open && !!items?.length && (
         <DropdownList>
           {items.map(item => (
-            <li
+            <DropdownItem
               key={getIdFromItem?.(item) ?? item.id}
-              onClick={() => onSelectHandler(item)}
-            >
-              {getNameFromItem?.(item) ?? item.name}
-            </li>
+              name={getNameFromItem?.(item) ?? item.name}
+              onSelectHandler={() => onSelectHandler(item)}
+            />
           ))}
         </DropdownList>
       )}

@@ -1,4 +1,4 @@
-import pkg from 'mongoose';
+import pkg, { Document } from 'mongoose';
 const { Schema, model, Types } = pkg;
 
 const schema = new Schema({
@@ -7,4 +7,4 @@ const schema = new Schema({
   games: [{ type: Types.ObjectId, ref: 'Game' }],
 });
 
-export default model('User', schema);
+export default model<IUser & Document>('User', schema);

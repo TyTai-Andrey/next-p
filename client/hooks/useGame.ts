@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 // local imports
 // components
-import { GameContext } from "@compositions/GameProvider";
+import { GameContext } from "@providers/GameProvider";
 
 const useGame = () => {
   const value = useContext(GameContext);
