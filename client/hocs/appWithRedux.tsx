@@ -1,11 +1,14 @@
 // vendor imports
 import { Provider as ReduxProvider } from "react-redux";
 
+// next
+import type { AppProps } from "next/app";
+
 // local imports
 import initializeStore from "@store";
 
-// pages
-import { IAppProps } from "@pages/_app";
+type ExtendedAppProps = { withSearchHeader?: boolean };
+type IAppProps = AppProps & { Component: ExtendedAppProps };
 
 const appWithRedux = (AppComponent: any) => {
   const AppWithRedux = (props: IAppProps) => {
@@ -24,4 +27,5 @@ const appWithRedux = (AppComponent: any) => {
   return AppWithRedux;
 };
 
+export type { ExtendedAppProps, IAppProps };
 export default appWithRedux;

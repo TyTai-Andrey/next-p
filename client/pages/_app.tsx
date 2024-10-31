@@ -1,9 +1,6 @@
-// next
-import type { AppProps } from "next/app";
-
 // local imports
 // hocs
-import appWithRedux from "@hocs/appWithRedux";
+import appWithRedux, { IAppProps } from "@hocs/appWithRedux";
 
 // styles
 import "@styles/globals.css";
@@ -13,9 +10,6 @@ import AuthProvider from "@providers/AuthProvider";
 import GameProvider from "@providers/GameProvider";
 import Layout from "@compositions/Layout";
 import ModalProvider from "@providers/ModalProvider";
-
-type ExtendedAppProps = { withSearchHeader?: boolean };
-type IAppProps = AppProps & { Component: ExtendedAppProps };
 
 const App = ({ Component, pageProps }: IAppProps) => (
   <AuthProvider>
@@ -28,7 +22,5 @@ const App = ({ Component, pageProps }: IAppProps) => (
     </GameProvider>
   </AuthProvider>
 );
-
-export type { ExtendedAppProps, IAppProps };
 
 export default appWithRedux(App);

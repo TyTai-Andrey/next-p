@@ -20,7 +20,7 @@ import { isNotErrorResponse } from "@interfaces/checks";
 import useGame from "@hooks/useGame";
 
 // pages
-import type { ExtendedAppProps } from "@pages/_app";
+import type { ExtendedAppProps } from "@hocs/appWithRedux";
 
 interface GameProps {
   game: GameDetails;

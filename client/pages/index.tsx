@@ -24,7 +24,7 @@ import getRouter from "@store/slices/router/selectors";
 import { isNotErrorResponse } from "@interfaces/checks";
 
 // pages
-import type { ExtendedAppProps } from "@pages/_app";
+import type { ExtendedAppProps } from "@hocs/appWithRedux";
 
 // store
 import { RootState } from "@store/slices";

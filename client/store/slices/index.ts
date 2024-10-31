@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 // Core
 import { all, call } from "redux-saga/effects";
 import { combineReducers } from "redux";
