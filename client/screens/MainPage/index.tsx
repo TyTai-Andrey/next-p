@@ -7,7 +7,6 @@ import {
   FC,
   useCallback,
   useEffect,
-  useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,7 +27,6 @@ import sortButtonsFields from "@screens/MainPage/utils";
 
 // hooks
 import usePushRouter from "@hooks/usePushRouter";
-import useQueryObserver from "@hooks/useQueryObserver";
 
 const GoUp = dynamic(() => import("@components/GoUp"), { ssr: false });
 
@@ -44,21 +42,9 @@ const MainPage: FC<MainPageProps> = ({ data, parentPlatforms }) => {
   const loading = useSelector(getGamesLoading);
   const error = useSelector(getGamesError);
 
-  const [parentPlatformsValue, setParentPlatformsValue] = useState(
-    Number(query?.get("parent_platforms")),
-  );
-
   const onChange = useCallback((value: string | number) => {
-    setParentPlatformsValue(Number(query?.get("parent_platforms")));
     pushRouterQuery("parent_platforms", value || undefined);
   }, [pushRouterQuery]);
-
-  const onChangeQueryParentPlatforms = useCallback(
-    () => Number(query?.get("parent_platforms")),
-    [query],
-  );
-
-  useQueryObserver(onChangeQueryParentPlatforms, "parent_platforms");
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -87,7 +73,7 @@ const MainPage: FC<MainPageProps> = ({ data, parentPlatforms }) => {
         <Select
           clearable
           onChange={onChange}
-          value={parentPlatformsValue}
+          value={Number(query?.get("parent_platforms"))}
         >
           {
             parentPlatforms.map(i => (
