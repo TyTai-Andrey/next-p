@@ -180,9 +180,9 @@ const Select: SelectType = ({
       {({ handleBlur, handleFocus }) => (
         <>
           <SelectInput
+            defaultValue={trueValue || ""}
             id={id}
             name={name}
-            value={trueValue || ""}
             {...props}
           />
 
