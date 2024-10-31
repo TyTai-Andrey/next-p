@@ -1,5 +1,12 @@
+// next
+import { useRouter } from "next/router";
+
 // react
-import { FC, useMemo } from "react";
+import {
+  FC,
+  useCallback,
+  useMemo,
+} from "react";
 
 // local imports
 // components
@@ -21,6 +28,7 @@ type GameCardProps = {
   website?: string;
   priority?: boolean;
   minHeightImage?: number;
+  withLink?: boolean;
 }
 
 const GameCard: FC<GameCardProps> = ({
@@ -28,13 +36,21 @@ const GameCard: FC<GameCardProps> = ({
   minHeightImage,
   priority,
   website,
+  withLink,
 }) => {
+  const { push } = useRouter();
   const parentPlatforms = useMemo(() => game?.parent_platforms
     ?.map(({ platform }) => `${platform.name}`)
     ?.join(" "), [game?.parent_platforms]);
 
+  const onLink = useCallback(() => {
+    if (withLink) {
+      push(`/game/${game.id}`);
+    }
+  }, [game.id, push, withLink]);
+
   return (
-    <Container>
+    <Container $withLink={withLink} onClick={onLink}>
       <Image
         $minHeightImage={minHeightImage}
         $noImg={!game?.background_image ? "true" : undefined}

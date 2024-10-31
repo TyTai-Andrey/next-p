@@ -1,6 +1,3 @@
-// next
-import Link from "next/link";
-
 // react
 import { useSelector } from "react-redux";
 
@@ -18,9 +15,7 @@ const GameCardsList = () => {
   return (
     <Container>
       {data?.map(game => (
-        <Link href={`/game/${game.id}`} key={game.id}>
-          <GameCard game={game} />
-        </Link>
+        <GameCard game={game} key={game.id} withLink />
       ))}
     </Container>
   );

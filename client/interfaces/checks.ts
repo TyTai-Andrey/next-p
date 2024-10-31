@@ -1,7 +1,9 @@
-function IsNotErrorResponse<T>(candidate: any):
-  candidate is IListResult<T> { return candidate?.error === undefined; }
+import { AxiosError } from "axios";
 
-function IsErrorResponse(candidate: any):
-  candidate is { error: unknown; } { return candidate?.error !== undefined; }
+const isNotErrorResponse = <T>(candidate: ITypeOrError<T>):
+  candidate is T => (candidate as { error: AxiosError; })?.error === undefined;
 
-export { IsErrorResponse, IsNotErrorResponse };
+const isErrorResponse = <T>(candidate: ITypeOrError<T>):
+  candidate is { error: unknown; } => (candidate as { error: AxiosError; })?.error !== undefined;
+
+export { isErrorResponse, isNotErrorResponse };

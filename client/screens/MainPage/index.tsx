@@ -24,7 +24,7 @@ import { getGamesError, getGamesLoading } from "@store/slices/games/selectors";
 import GamesActions from "@store/slices/games/actions";
 
 // utils
-import { getParentPlatformsValue, sortButtonsFields } from "@screens/MainPage/utils";
+import sortButtonsFields from "@screens/MainPage/utils";
 
 // hooks
 import usePushRouter from "@hooks/usePushRouter";
@@ -44,17 +44,17 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
   const error = useSelector(getGamesError);
 
   const [parentPlatformsValue, setParentPlatformsValue] = useState(
-    getParentPlatformsValue(parentPlatforms, query),
+    Number(query?.get("parent_platforms")),
   );
 
-  const onChange = useCallback((item?: PlatformDetails, value?: string) => {
-    setParentPlatformsValue(item?.name ?? "");
-    pushRouterQuery("parent_platforms", value);
+  const onChange = useCallback((value: string | number) => {
+    setParentPlatformsValue(Number(query?.get("parent_platforms")));
+    pushRouterQuery("parent_platforms", value || undefined);
   }, [pushRouterQuery]);
 
   const onChangeQueryParentPlatforms = useCallback(
-    () => setParentPlatformsValue(getParentPlatformsValue(parentPlatforms, query)),
-    [parentPlatforms],
+    () => Number(query?.get("parent_platforms")),
+    [query],
   );
 
   useQueryObserver(onChangeQueryParentPlatforms, "parent_platforms");
@@ -84,11 +84,21 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
           fields={sortButtonsFields}
         />
         <Select
-          items={parentPlatforms}
+          clearable
           onChange={onChange}
-          placeholder="Platforms"
           value={parentPlatformsValue}
-        />
+        >
+          {
+            parentPlatforms.map(i => (
+              <Select.Option
+                key={i.id}
+                label={i.name}
+                value={i.id}
+              />
+            ),
+            )
+          }
+        </Select>
         <GameCardsList />
       </SpaceColumn>
       <GoUp />

@@ -14,7 +14,10 @@ import GameProvider from "@providers/GameProvider";
 import Layout from "@compositions/Layout";
 import ModalProvider from "@providers/ModalProvider";
 
-const App = ({ Component, pageProps }: AppProps & { Component: { withSearchHeader?: boolean } }) => (
+type ExtendedAppProps = { withSearchHeader?: boolean };
+type IAppProps = AppProps & { Component: ExtendedAppProps };
+
+const App = ({ Component, pageProps }: IAppProps) => (
   <AuthProvider>
     <GameProvider>
       <ModalProvider>
@@ -25,5 +28,7 @@ const App = ({ Component, pageProps }: AppProps & { Component: { withSearchHeade
     </GameProvider>
   </AuthProvider>
 );
+
+export type { ExtendedAppProps, IAppProps };
 
 export default appWithRedux(App);

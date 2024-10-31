@@ -1,6 +1,5 @@
 // react
 import {
-  ChangeEvent,
   FC,
   useCallback,
   useEffect,
@@ -10,7 +9,6 @@ import {
 
 // next
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 // local imports
 // components
@@ -19,8 +17,8 @@ import {
   Container,
   LinksContainer,
 } from "@compositions/Header/style";
+import AsyncSelect from "@components/AsyncSelect";
 import RegisterModal from "@modals/RegisterModal";
-import Search from "@components/Search";
 import { SpaceBetween } from "@components/Space";
 
 // api
@@ -33,38 +31,23 @@ import useModal from "@hooks/useModal";
 import usePushRouter from "@hooks/usePushRouter";
 
 // interfaces
-import { IsErrorResponse, IsNotErrorResponse } from "@interfaces/checks";
+import { isErrorResponse, isNotErrorResponse } from "@interfaces/checks";
 
 type HeaderProps = {
   withSearch?: boolean;
 }
 
 const Header: FC<HeaderProps> = ({ withSearch }) => {
-  const [dropdownItems, setDropdownItems] = useState<Game[]>([]);
   const [isGameAdded, setIsGameAdded] = useState<null | boolean>(null);
 
   const { pushRouter } = usePushRouter();
-  const query = useSearchParams();
   const { logout, token } = useAuth();
   const { openModal } = useModal();
   const { game } = useGame();
 
-  const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const search = e?.target?.value;
-
-    const response = await GamesApi.getList({ search });
-
-    if (IsNotErrorResponse(response)) {
-      setDropdownItems(response.results);
-    }
-  };
-
-  const onSelect = useCallback(({ id }: { id: string }) => {
-    setDropdownItems([]);
+  const onSelect = useCallback((id: string | number) => {
     if (id) pushRouter(`/game/${id}`);
   }, [pushRouter]);
-
-  const onClear = useCallback(() => setDropdownItems([]), []);
 
   const onLogin = useCallback(() => {
     openModal(RegisterModal);
@@ -80,7 +63,7 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
 
       const res = await GamesApi.addGameById(game.id, data);
 
-      if (IsNotErrorResponse(res)) {
+      if (isNotErrorResponse(res)) {
         setIsGameAdded(true);
       }
     }
@@ -90,7 +73,7 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
     if (game) {
       const res = await GamesApi.removeGameById(game.id);
 
-      if (IsNotErrorResponse(res)) {
+      if (isNotErrorResponse(res)) {
         setIsGameAdded(false);
       }
     }
@@ -105,7 +88,7 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
   const intervalHandler = useCallback(async () => {
     if (game && token) {
       const response = await GamesApi.isGameAdded(game.id);
-      if (!IsErrorResponse(response)) {
+      if (!isErrorResponse(response)) {
         setIsGameAdded(response.result);
       } else {
         setIsGameAdded(null);
@@ -123,6 +106,8 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
     };
   }, [intervalHandler]);
 
+  const fetch = async (search: string) => GamesApi.getList({ search });
+
   return (
     <Container>
       <SpaceBetween>
@@ -130,12 +115,11 @@ const Header: FC<HeaderProps> = ({ withSearch }) => {
           <Link href="/">Games</Link>
         </LinksContainer>
         {withSearch && (
-          <Search
-            dropdownItems={dropdownItems}
-            initValue={query?.get("search") ?? ""}
-            onChange={onChange}
-            onClear={onClear}
-            onSelect={onSelect}
+          <AsyncSelect
+            dataToRender={(data: Game) => data.name}
+            dataToValue={(data: Game) => data.id}
+            fetch={fetch}
+            onChange={onSelect}
           />
         )}
         {button}

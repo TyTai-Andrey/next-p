@@ -4,6 +4,8 @@ import {
   cloneElement,
   forwardRef,
   isValidElement,
+  useCallback,
+  useMemo,
   useRef,
 } from "react";
 import { Portal } from "react-portal";
@@ -17,13 +19,16 @@ import {
   Content,
 } from "@modals/Modal/style";
 
-export interface ModalProps {
-  children?: React.ReactNode | ((data: any) => React.ReactNode);
+type ExtendedModalProps = {
   className?: string;
+};
+
+export type ModalProps = {
+  children?: React.ReactNode | ((data: ExtendedModalProps) => React.ReactNode);
   isOpen?: boolean;
   onClose?: () => void;
   style?: React.CSSProperties;
-}
+} & ExtendedModalProps;
 
 const Modal: FC<ModalProps> = forwardRef(
   (
@@ -35,9 +40,22 @@ const Modal: FC<ModalProps> = forwardRef(
     const $content = useRef<HTMLDivElement>(null);
     const $backdrop = useRef<HTMLDivElement>(null);
 
-    const handleClose = () => {
-      onClose?.();
-    };
+    const handleClose = useCallback(() => {
+      if (onClose) onClose();
+    }, [onClose]);
+
+    const element = useMemo(() => {
+      if (typeof children === "function") {
+        return children({ ...props });
+      }
+      if (isValidElement(children)) {
+        return cloneElement(children, {
+          ...(children.props ?? {}),
+          ...props,
+        });
+      }
+      return children;
+    }, [children, props]);
 
     return isOpen && (
       <Portal>
@@ -45,17 +63,10 @@ const Modal: FC<ModalProps> = forwardRef(
           <Backdrop ref={$backdrop} />
 
           <Content ref={$content} style={style}>
-            <Close onClick={handleClose} />
-
-            {typeof children === "function" ?
-              (children as any)({ ...props }) :
-              // eslint-disable-next-line @getify/proper-ternary/nested
-              isValidElement(children) ?
-                cloneElement(children, {
-                  ...(children.props ?? {}),
-                  ...props,
-                }) :
-                children}
+            <Close onClick={handleClose}>
+              <i className="fa-solid fa-xmark" />
+            </Close>
+            {element}
           </Content>
         </Container>
       </Portal>
@@ -63,5 +74,4 @@ const Modal: FC<ModalProps> = forwardRef(
   },
 );
 
-// Exports
 export default Modal;

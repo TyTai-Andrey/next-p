@@ -4,12 +4,11 @@ import { Provider as ReduxProvider } from "react-redux";
 // local imports
 import initializeStore from "@store";
 
-/**
- * @description Оборачивает App-компонент на самом высоком уровне.
- *              Реализовано с целью сохранить state при смене языка.
- */
+// pages
+import { IAppProps } from "@pages/_app";
+
 const appWithRedux = (AppComponent: any) => {
-  const AppWithRedux = (props: any) => {
+  const AppWithRedux = (props: IAppProps) => {
     const { pageProps } = props;
     const { initialReduxState } = pageProps;
 

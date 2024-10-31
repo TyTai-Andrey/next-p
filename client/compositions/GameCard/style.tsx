@@ -9,7 +9,7 @@ import styled, { css } from "styled-components";
 import H1 from "@components/Texts";
 import { SpaceBetween } from "@components/Space";
 
-const Container = styled.div`
+const Container = styled.div<{ $withLink?: boolean }>`
   display: flex;
   flex-direction: column;
 
@@ -17,6 +17,10 @@ const Container = styled.div`
   overflow: hidden;
 
   position: relative;
+
+  ${({ $withLink }) => $withLink && css`
+    cursor: pointer;
+  `};
 `;
 
 type InfoProps = { noPadding?: boolean; }

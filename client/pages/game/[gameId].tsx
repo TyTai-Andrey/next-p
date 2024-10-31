@@ -1,4 +1,5 @@
 // next
+import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import Head from "next/head";
 
 // react
@@ -13,17 +14,20 @@ import GamesApi from "@api/GamesApi";
 import GamePage from "@screens/GamePage";
 
 // types
-import { IsNotErrorResponse } from "@interfaces/checks";
+import { isNotErrorResponse } from "@interfaces/checks";
 
 // hooks
 import useGame from "@hooks/useGame";
+
+// pages
+import type { ExtendedAppProps } from "@pages/_app";
 
 interface GameProps {
   game: GameDetails;
   screenshotsData: IListResult<Screenshot>;
 }
 
-const Game: FC<GameProps> = ({ game, screenshotsData }) => {
+const Game: FC<GameProps> & ExtendedAppProps = ({ game, screenshotsData }) => {
   const { results: images } = screenshotsData || { results: [] };
   const { setGame } = useGame();
 
@@ -57,7 +61,7 @@ const getPathsIds: GetPathsIdsProps = async (first, url = `${process.env.NEXT_PU
     params: { page_size: 40 },
   });
 
-  if (IsNotErrorResponse(data)) {
+  if (isNotErrorResponse(data)) {
     const paths = data?.results?.map(i => ({ params: { gameId: String(i.id) } }));
 
     // !first - не хочу билдить себе 850 000+ страниц
@@ -77,11 +81,19 @@ export const getStaticPaths = async () => {
   return { fallback: "blocking", paths };
 };
 
-export const getStaticProps = async (ctx: any) => {
-  const { params: { gameId } } = ctx;
+export const getStaticProps = async (ctx: GetStaticPropsContext<{ gameId: string }>): Promise<GetStaticPropsResult<GameProps>> => {
+  const gameId = ctx.params?.gameId;
 
-  const game = await GamesApi.getGameById(gameId);
-  const screenshotsData = await GamesApi.getScreenshotsGameById(gameId);
+  if (gameId) {
+    const [game, screenshotsData] = await Promise.all([
+      GamesApi.getGameById(gameId),
+      GamesApi.getScreenshotsGameById(gameId),
+    ]);
 
-  return { props: { game, screenshotsData } };
+    if (isNotErrorResponse(game) && isNotErrorResponse(screenshotsData)) {
+      return { props: { game, screenshotsData } };
+    }
+  }
+
+  return { notFound: true };
 };

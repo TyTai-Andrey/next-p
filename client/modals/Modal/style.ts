@@ -57,18 +57,15 @@ const Close = styled.button`
   text-decoration: none;
   white-space: nowrap;
   position: absolute;
-  top: 19px;
-  right: 19px;
+  top: 20px;
+  right: 20px;
   width: 2em;
   height: 2em;
   background-color: rgba(161, 161, 161, 0.8);
   border-radius: 100%;
 
-  &::before {
-    content: "✕";
-    position: relative;
-    font-size: 1.5em;
-    color: #000;
+  i {
+    font-size: 1.3em;
   }
 `;
 

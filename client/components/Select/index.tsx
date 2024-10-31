@@ -1,106 +1,246 @@
-// vendor imports
-import { v4 as uuid } from "uuid";
-
 // react
-import {
-  ChangeEvent,
-  InputHTMLAttributes,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { useCallback, useEffect } from "react";
 
-// local imports
+// hooks
+import useDropdown from "@hooks/useDropdown";
+
 // components
-import { Clear, Container } from "@components/Select/style";
-import Dropdown from "@components/Dropdown";
-import Input from "@components/Input";
+import {
+  Chevron,
+  DropdownWrapper,
+  SelectInput,
+  StyledInputBase,
+  TextInput,
+} from "@components/Select/style";
+import Option from "@components/Select/Option";
+import Scrollbar from "@components/Scrollbar/Scrollbar";
 
-type SelectProps<T> = {
-  getIdFromItem?: (item: T) => string;
-  getNameFromItem?: (item: T) => string;
-  items: T[];
-  onChange?: (item?: T, id?: string) => void;
-  onChangeInput?: (e: ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange">;
+// types
+import type { PositionType } from "@hooks/useDropdown";
+import type { SelectOptionProps } from "@components/Select/Option";
 
-function Select<T extends DefaultItem>({
-  getIdFromItem,
-  getNameFromItem,
-  items: _items,
-  onChange,
-  onChangeInput,
-  value: _value = "",
-  ...props
-}: SelectProps<T>) {
-  const [value, setValue] = useState<string>(_value);
-  const [items, setItems] = useState(_items);
-  const [_update, update] = useReducer((c: number) => c + 1, 0);
-
-  const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    onChangeInput?.(e);
-    setValue(value);
-    setItems(
-      _items?.filter(i => (getNameFromItem?.(i) ?? i.name)
-        ?.toLocaleLowerCase()
-        ?.includes(value.trim().toLocaleLowerCase() ?? ""),
-      ),
-    );
-  }, [_items, getNameFromItem, onChangeInput]);
-
-  const onSelectHandler = useCallback((item: T) => {
-    setValue(getNameFromItem?.(item) ?? item.name);
-    onChange?.(item, getIdFromItem?.(item) ?? item?.id);
-  }, [getIdFromItem, getNameFromItem, onChange]);
-
-  const onFocus = useCallback(() => {
-    setValue("");
-    setItems(_items);
-  }, [_items]);
-
-  const onBlur = useCallback(() => {
-    update();
-  }, [update]);
-
-  const onClear = useCallback(() => {
-    setValue("");
-    onChange?.(undefined, undefined);
-  }, [onChange]);
-
-  useEffect(() => {
-    setValue(_value);
-  }, [_value, _update]);
-
-  useEffect(() => {
-    setItems(
-      _items?.filter(i => (getNameFromItem?.(i) ?? i.name)
-        ?.toLocaleLowerCase()
-        ?.includes(value?.toLocaleLowerCase() ?? ""),
-      ),
-    );
-  }, [_items, getNameFromItem, value]);
-
-  return (
-    <Container>
-      <Dropdown
-        id={`select${uuid()}`}
-        items={items}
-        onSelect={onSelectHandler}
-      >
-        <Input
-          onBlur={onBlur}
-          onChange={onChangeHandler}
-          onFocus={onFocus}
-          value={value}
-          {...props}
-        />
-      </Dropdown>
-      {value && <Clear onClick={onClear} />}
-    </Container>
-  );
+interface SelectProps {
+  className?: string;
+  children?: React.ReactNode;
+  id?: string;
+  name?: string;
+  value?: number | string | null;
+  label?: string;
+  error?: boolean | string | null;
+  autoFocus?: boolean;
+  disabled?: boolean;
+  onChange?: (value: string | number) => void;
+  onInput?: (value: string) => void;
+  onScroll?: (event: React.UIEvent) => void;
+  onOpen?: () => void;
+  onClose?: () => void;
+  clearable?: boolean;
+  defaultDisplayValue?: string | number | null;
+  placementStyle?: "absolute" | "fixed";
+  positionDropdown?: PositionType;
+  offsetYDropdown?: number;
+  variantError?: "default" | "minimal";
 }
 
+interface SelectType extends React.FC<SelectProps> {
+  Option: typeof Option;
+}
+
+const Select: SelectType = ({
+  children,
+  className,
+  clearable = true,
+  defaultDisplayValue,
+  disabled = false,
+  error,
+  id,
+  label,
+  name,
+  offsetYDropdown = 0,
+  onChange,
+  onClose,
+  onInput,
+  onOpen,
+  onScroll,
+  placementStyle,
+  positionDropdown = "bottom left",
+  value,
+  ...props
+}) => {
+  const $input = React.useRef(null);
+  const $wrapper = React.useRef<HTMLDivElement>(null);
+
+  const [trueValue, setTrueValue] =
+    React.useState<string | number | undefined | null>(value || "");
+
+  const [displayValue, setDisplayValue] = React.useState<string | number>(
+    defaultDisplayValue || "",
+  );
+  const [hasSelectedItem, setHasSelectedItem] = React.useState<any>("");
+
+  const width = React.useMemo(() => {
+    if ($wrapper.current) {
+      const rect = $wrapper.current.getBoundingClientRect();
+
+      return rect.width;
+    }
+
+    return 0;
+  }, [$wrapper.current?.offsetWidth]);
+
+  const {
+    close,
+    Dropdown,
+    isOpen,
+    open,
+  } = useDropdown({
+    offsetY: offsetYDropdown + 2,
+    onClose,
+    onOpen,
+    placementStyle,
+    position: positionDropdown,
+    ref: $wrapper,
+  });
+
+  const chevron = React.useMemo(() => {
+    const handleClick = () => {
+      if (trueValue) {
+        if (isOpen) open();
+        setHasSelectedItem("");
+        setTrueValue(null);
+        handleInput("");
+        onChange?.(null!);
+      }
+    };
+
+    const chevronClassNameWithoutValue = isOpen ? "fa-chevron-down" : "fa-chevron-up";
+    const chevronClassName = trueValue ? "fa-xmark" : chevronClassNameWithoutValue;
+
+    return (
+      <Chevron onClick={handleClick}>
+        <i className={`fa-solid ${chevronClassName}`} />
+      </Chevron>
+    );
+  }, [isOpen, trueValue]);
+
+  const handleSelect = useCallback((value: string | number, label: string) => {
+    setTrueValue(value);
+    setDisplayValue(label);
+    onChange?.(value);
+    setHasSelectedItem(value);
+    close();
+  }, [close, onChange]);
+
+  const handleInput = useCallback((value: string) => {
+    setHasSelectedItem(value);
+    setDisplayValue(value);
+    onInput?.(value);
+  }, [onInput]);
+
+  useEffect(() => {
+    if (defaultDisplayValue) {
+      setDisplayValue(defaultDisplayValue);
+    }
+  }, [defaultDisplayValue]);
+
+  useEffect(() => {
+    React.Children.forEach(children, (child) => {
+      if (React.isValidElement(child) && (child?.props as any)?.value === value) {
+        setDisplayValue((child?.props as any)?.label);
+        setTrueValue((child?.props as any)?.value);
+      }
+    });
+  }, [children]);
+
+  useEffect(() => {
+    if (!value) {
+      setDisplayValue("");
+      setTrueValue(null);
+    }
+  }, [value]);
+
+  return (
+    <StyledInputBase
+      className={className}
+      disabled={disabled}
+      error={error}
+      id={id}
+      label={label}
+      onClick={
+        !disabled ?
+          () => {
+            if (!isOpen) open();
+          } :
+          undefined
+      }
+      ref={$wrapper}
+      suffix={!disabled && clearable && chevron}
+      value={displayValue}
+    >
+      {({ handleBlur, handleFocus }) => (
+        <>
+          <SelectInput
+            id={id}
+            name={name}
+            value={trueValue || ""}
+            {...props}
+          />
+
+          <TextInput
+            disabled={disabled}
+            onBlur={(e: any) => {
+              if (!hasSelectedItem) {
+                handleBlur(e);
+              }
+            }}
+            onChange={event => handleInput(event.currentTarget.value)}
+            onFocus={handleFocus}
+            readOnly={!onInput || !!trueValue}
+            ref={$input}
+            title={String(displayValue)}
+            value={displayValue || ""}
+          />
+
+          <Dropdown style={{ width }}>
+            <DropdownWrapper>
+              <Scrollbar onScroll={onScroll}>
+                {React.Children.map(
+                  children,
+                  (child, index) => {
+                    if (!React.isValidElement(child)) {
+                      return null;
+                    }
+
+                    const onClick = (
+                      value: string | number,
+                      label: string,
+                    ) => {
+                      child?.props?.onClick?.();
+                      handleSelect?.(value, label);
+                    };
+
+                    return React.cloneElement<SelectOptionProps>(
+                      // @ts-ignore
+                      child,
+                      {
+                        // eslint-disable-next-line react/no-array-index-key
+                        key: `${child?.props?.value || child?.props?.label}_${index}`,
+                        onClick,
+                        selected: trueValue === child.props.value,
+                      },
+                    );
+                  },
+                )}
+              </Scrollbar>
+            </DropdownWrapper>
+          </Dropdown>
+        </>
+      )}
+    </StyledInputBase>
+  );
+};
+
+Select.Option = Option;
+
+export type { SelectProps };
 export default Select;

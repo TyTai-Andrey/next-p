@@ -1,4 +1,5 @@
 // next
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -19,12 +20,21 @@ import RouterActions from "@store/slices/router/actions";
 import { getGamesResult } from "@store/slices/games/selectors";
 import getRouter from "@store/slices/router/selectors";
 
+// interfaces
+import { isNotErrorResponse } from "@interfaces/checks";
+
+// pages
+import type { ExtendedAppProps } from "@pages/_app";
+
+// store
+import { RootState } from "@store/slices";
+
 interface HomeProps {
   data: IListResult<Game>;
   parentPlatformsData: IListResult<PlatformDetails>;
 }
 
-const Home: FC<HomeProps> = ({
+const Home: FC<HomeProps> & ExtendedAppProps = ({
   data,
   parentPlatformsData: { results: parentPlatforms },
 }) => {
@@ -51,21 +61,27 @@ const Home: FC<HomeProps> = ({
   );
 };
 
-// @ts-ignore
 Home.withSearchHeader = true;
 
 export default Home;
 
-export const getServerSideProps = async (ctx: any) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promise<
+  GetServerSidePropsResult<HomeProps & { initialReduxState: PartialAll<RootState> }>
+> => {
   const { query } = ctx;
   const data = await GamesApi.getList(query);
   const parentPlatformsData = await ParentPlatformsApi.getList();
 
-  return {
-    props: {
-      data,
-      initialReduxState: { games: { data } },
-      parentPlatformsData,
-    },
-  };
+  // const referer = req.cookies[`${domainConstants?.key}_referer`];
+
+  if (isNotErrorResponse(data) && isNotErrorResponse(parentPlatformsData)) {
+    return {
+      props: {
+        data,
+        initialReduxState: { games: { data } },
+        parentPlatformsData,
+      },
+    };
+  }
+  return { notFound: true };
 };

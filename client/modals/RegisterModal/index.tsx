@@ -1,5 +1,9 @@
 // react
-import React, { useCallback, useState } from "react";
+import React, {
+  FC,
+  useCallback,
+  useState,
+} from "react";
 
 // local imports
 // components
@@ -9,14 +13,14 @@ import {
   Error,
   Link,
   StyledH1,
-  StyledInput,
   Text,
 } from "@modals/RegisterModal/style";
+import Input from "@components/Input";
 import Modal from "@modals/Modal";
 
 // types
-import { IsErrorResponse } from "@interfaces/checks";
 import type { ModalComponentProps } from "@providers/ModalProvider";
+import { isErrorResponse } from "@interfaces/checks";
 
 // hooks
 import useAuth from "@hooks/useAuth";
@@ -24,10 +28,10 @@ import useAuth from "@hooks/useAuth";
 // api
 import AuthApi from "@api/AuthApi";
 
-const RegisterModal = ({
+const RegisterModal: FC<ModalComponentProps> = ({
   handleClose,
   isOpen,
-}: ModalComponentProps) => {
+}) => {
   const { setToken } = useAuth();
   const [value, setValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +47,7 @@ const RegisterModal = ({
   const onSubmit = async () => {
     if (value.trim()) {
       const response = await AuthApi.login(value);
-      if (!IsErrorResponse(response)) {
+      if (!isErrorResponse(response)) {
         if (response?.token) {
           setToken(response?.token);
           handleClose();
@@ -71,7 +75,7 @@ const RegisterModal = ({
           <Text>
             <Link href="https://t.me/portfolioAndreyBot" target="_blank">https://t.me/portfolioAndreyBot</Link>
           </Text>
-          <StyledInput
+          <Input
             onChange={onChangeHandler}
             placeholder="Введите логин, который получите в боте"
             value={value}

@@ -7,7 +7,6 @@ import NextLink from "next/link";
 // local imports
 // components
 import H1 from "@components/Texts";
-import Input from "@components/Input";
 
 const Text = styled.p`
   color: black;
@@ -40,12 +39,6 @@ const Link = styled(NextLink)`
   font-size: 1.3em;
 `;
 
-const StyledInput = styled(Input)`
-  background-color: #8080801c;
-  margin: 10px 0 3px;
-  font-size: 1.3em;
-`;
-
 const StyledH1 = styled(H1)`
   color: black;
 `;
@@ -63,6 +56,5 @@ export {
   Error,
   Link,
   StyledH1,
-  StyledInput,
   Text,
 };
