@@ -33,10 +33,11 @@ import useQueryObserver from "@hooks/useQueryObserver";
 const GoUp = dynamic(() => import("@components/GoUp"), { ssr: false });
 
 interface MainPageProps {
+  data: IListResult<Game>;
   parentPlatforms: PlatformDetails[];
 }
 
-const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
+const MainPage: FC<MainPageProps> = ({ data, parentPlatforms }) => {
   const query = useSearchParams();
   const { pushRouterQuery } = usePushRouter();
   const dispatch = useDispatch();
@@ -99,7 +100,7 @@ const MainPage: FC<MainPageProps> = ({ parentPlatforms }) => {
             )
           }
         </Select>
-        <GameCardsList />
+        <GameCardsList initData={data.results} />
       </SpaceColumn>
       <GoUp />
     </>

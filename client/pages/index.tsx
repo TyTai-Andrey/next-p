@@ -56,7 +56,7 @@ const Home: FC<HomeProps> & ExtendedAppProps = ({
         <title>Games</title>
         <meta content="Games" name="description" />
       </Head>
-      <MainPage parentPlatforms={parentPlatforms} />
+      <MainPage data={data} parentPlatforms={parentPlatforms} />
     </>
   );
 };
