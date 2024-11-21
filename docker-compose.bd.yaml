@@ -2,7 +2,6 @@ version: '3'
 services:
   nextMongodb:
     image: mongo
-    restart: always
     container_name: nextMongodb
     ports:
       - 27017:27017

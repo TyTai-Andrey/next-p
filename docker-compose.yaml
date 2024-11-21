@@ -12,7 +12,6 @@ services:
     depends_on:
     - server
   server:
-    restart: always
     entrypoint:
         node build/index
     build:
@@ -26,7 +25,6 @@ services:
       - mongoDomain=nextMongodb
   nextMongodb:
     image: mongo
-    restart: always
     container_name: nextMongodb
     ports:
       - 27017:27017
