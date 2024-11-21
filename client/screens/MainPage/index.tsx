@@ -7,6 +7,7 @@ import {
   FC,
   useCallback,
   useEffect,
+  useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -42,6 +43,8 @@ const MainPage: FC<MainPageProps> = ({ data, parentPlatforms }) => {
   const loading = useSelector(getGamesLoading);
   const error = useSelector(getGamesError);
 
+  const parentPlatformsSelectValue = useMemo(() => Number(query?.get("parent_platforms")), [query]);
+
   const onChange = useCallback((value: string | number) => {
     pushRouterQuery("parent_platforms", value || undefined);
   }, [pushRouterQuery]);
@@ -73,7 +76,7 @@ const MainPage: FC<MainPageProps> = ({ data, parentPlatforms }) => {
         <Select
           clearable
           onChange={onChange}
-          value={Number(query?.get("parent_platforms"))}
+          value={parentPlatformsSelectValue}
         >
           {
             parentPlatforms.map(i => (

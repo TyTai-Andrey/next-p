@@ -1,10 +1,5 @@
 type InitState = {
-  data?: {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: null | Game[];
-  };
+  data?: IListResult<Game>;
   loading: boolean;
   error: boolean;
 }

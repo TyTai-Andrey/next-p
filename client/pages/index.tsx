@@ -1,5 +1,9 @@
 // next
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  InferGetServerSidePropsType,
+} from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -15,9 +19,9 @@ import ParentPlatformsApi from "@api/ParentPlatformsApi";
 import MainPage from "@screens/MainPage";
 
 // store
+import { getGamesData, getGamesResult } from "@store/slices/games/selectors";
 import GamesActions from "@store/slices/games/actions";
 import RouterActions from "@store/slices/router/actions";
-import { getGamesResult } from "@store/slices/games/selectors";
 import getRouter from "@store/slices/router/selectors";
 
 // interfaces
@@ -34,7 +38,7 @@ interface HomeProps {
   parentPlatformsData: IListResult<PlatformDetails>;
 }
 
-const Home: FC<HomeProps> & ExtendedAppProps = ({
+const Home: FC<InferGetServerSidePropsType<typeof getServerSideProps>> & ExtendedAppProps = ({
   data,
   parentPlatformsData: { results: parentPlatforms },
 }) => {
@@ -42,6 +46,7 @@ const Home: FC<HomeProps> & ExtendedAppProps = ({
   const prevRouter = useSelector(getRouter);
   const router = useRouter();
   const result = useSelector(getGamesResult);
+  const gameData = useSelector(getGamesData);
 
   useEffect(() => {
     if ((!!prevRouter && router.asPath !== prevRouter) || !result?.length) {
@@ -56,7 +61,7 @@ const Home: FC<HomeProps> & ExtendedAppProps = ({
         <title>Games</title>
         <meta content="Games" name="description" />
       </Head>
-      <MainPage data={data} parentPlatforms={parentPlatforms} />
+      <MainPage data={gameData ?? data} parentPlatforms={parentPlatforms} />
     </>
   );
 };
@@ -69,10 +74,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext): Promis
   GetServerSidePropsResult<HomeProps & { initialReduxState: PartialAll<RootState> }>
 > => {
   const { query } = ctx;
+
   const data = await GamesApi.getList(query);
   const parentPlatformsData = await ParentPlatformsApi.getList();
-
-  // const referer = req.cookies[`${domainConstants?.key}_referer`];
 
   if (isNotErrorResponse(data) && isNotErrorResponse(parentPlatformsData)) {
     return {

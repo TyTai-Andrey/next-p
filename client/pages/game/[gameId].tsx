@@ -1,5 +1,9 @@
 // next
-import { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import {
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetServerSidePropsType,
+} from "next";
 import Head from "next/head";
 
 // react
@@ -27,7 +31,7 @@ interface GameProps {
   screenshotsData: IListResult<Screenshot>;
 }
 
-const Game: FC<GameProps> & ExtendedAppProps = ({ game, screenshotsData }) => {
+const Game: FC<InferGetServerSidePropsType<typeof getStaticProps>> & ExtendedAppProps = ({ game, screenshotsData }) => {
   const { results: images } = screenshotsData || { results: [] };
   const { setGame } = useGame();
 

@@ -12,7 +12,7 @@ const initialState: InitState = {
     count: 0,
     next: null,
     previous: null,
-    results: null,
+    results: [],
   },
   error: false,
   loading: false,

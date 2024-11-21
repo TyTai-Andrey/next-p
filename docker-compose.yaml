@@ -21,12 +21,12 @@ services:
     ports:
     - 8080:8080
     depends_on:
-    - mongodb
+    - nextMongodb
     environment:
-      - mongoDomain=mongodb
-  mongodb:
+      - mongoDomain=nextMongodb
+  nextMongodb:
     image: mongo
     restart: always
-    container_name: mongodb
+    container_name: nextMongodb
     ports:
       - 27017:27017

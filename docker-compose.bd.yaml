@@ -1,8 +1,8 @@
 version: '3'
 services:
-  mongodb:
+  nextMongodb:
     image: mongo
     restart: always
-    container_name: mongodb
+    container_name: nextMongodb
     ports:
       - 27017:27017

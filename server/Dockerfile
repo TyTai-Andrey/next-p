@@ -6,6 +6,7 @@ RUN npm ci
 FROM node:16.20.1-alpine as builder
 WORKDIR /server
 COPY . .
-ENV mongoDomain=mongodb
+COPY --from=dependencies /server/node_modules ./node_modules
+ENV mongoDomain=nextMongodb
 RUN rm -rf /server/build
 RUN npx tsc
